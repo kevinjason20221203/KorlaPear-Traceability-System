@@ -1,0 +1,86 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <title>库尔勒香梨溯源系统 - 登录</title>
+    {%load static%}  
+  
+
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+            /*background-color: #C8E6C9;*/
+            font-family: Arial, sans-serif;
+            background-image: url('/static/images/we.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+          }
+          .container {
+              width: 500px;
+              height: 400px;
+              margin: 0 auto;
+              padding: 20px;
+              background-color: #FFF8DC;
+              border-radius: 5px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            .thehead {
+              text-align: center;
+              margin-bottom: 20px;
+              align-items: center;
+              justify-content: center;
+            }
+          .container input[type="text"],
+          .container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            border: 1px solid dodgerblue;
+          }
+          .container input[type="submit"] {
+              width: 100%;
+              padding: 10px;
+              background-color: #4caf50;
+              color: #fff;
+              border: none;
+              border-radius: 3px;
+              cursor: pointer;
+          }
+          .container input[type="submit"]:hover {
+              background-color: #45a049;
+              color: white;
+            }
+          
+    </style>
+</head>  
+<body>  
+ <div class=container>
+  <div class="thehead">
+  <h1>系统登录</h1> 
+  <img src="{% static 'images/logo.png' %}" alt="Logo" width="150" height="90">
+  </div>
+  <form action="" method=POST>
+    {% csrf_token %}
+    {% if error_message %}
+    <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+    <label for="fname">用户名：</label>   
+    <input type="text" placeholder="请输入用户名" name='fname' required> <br>
+
+    <label for ="fname">密码：</label>
+    <input type="password" placeholder="请输入您的登录密码" name='pwd' required>  <br>
+
+    
+    <input type="submit" value="立即登录">
+    <p>还没有账号？<a href="{% url 'authentication:register' %}">点击注册</a></p>
+  </form>
+ </div>
+</body>  
+</html> 

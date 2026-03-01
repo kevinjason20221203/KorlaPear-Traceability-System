@@ -1,0 +1,351 @@
+{%extends 'homepage/base.html'%}
+{%block content%}
+<head>
+    <title>系统设置</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .settings-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4CAF50;
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .settings-section h2 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .settings-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .settings-item label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .settings-item input,
+        .settings-item select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .settings-item input:focus,
+        .settings-item select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .info-box {
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .info-box h3 {
+            color: #2e7d32;
+            margin-top: 0;
+        }
+
+        .version-info {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            border: 1px dashed #ccc;
+        }
+
+        .version-info h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .version-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .update-date {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .system-status {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 5px;
+            border: 1px solid #bbdefb;
+        }
+
+        .status-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .status-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1976d2;
+        }
+
+        .status-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <h1>⚙️ 系统设置</h1>
+
+        <div class="settings-section">
+            <h2>📋 基本信息设置</h2>
+            
+            <div class="settings-item">
+                <label for="company-name">果园/企业名称</label>
+                <input type="text" id="company-name" value="库尔勒香梨示范园" placeholder="请输入您的果园或企业名称">
+            </div>
+
+            <div class="settings-item">
+                <label for="contact-person">联系人</label>
+                <input type="text" id="contact-person" value="张经理" placeholder="请输入联系人姓名">
+            </div>
+
+            <div class="settings-item">
+                <label for="contact-phone">联系电话</label>
+                <input type="tel" id="contact-phone" value="138-0013-8000" placeholder="请输入联系电话">
+            </div>
+
+            <div class="settings-item">
+                <label for="email">电子邮箱</label>
+                <input type="email" id="email" value="contact@kuerle-pear.com" placeholder="请输入电子邮箱">
+            </div>
+
+            <div class="settings-item">
+                <label for="address">果园地址</label>
+                <input type="text" id="address" value="新疆维吾尔自治区巴音郭楞蒙古自治州库尔勒市" placeholder="请输入果园详细地址">
+            </div>
+
+            <div class="button-group">
+                <button class="btn">保存基本信息</button>
+                <button class="btn btn-secondary">恢复默认</button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>🔐 个人密码修改</h2>
+            
+            <div class="settings-item">
+                <label for="current-password">当前密码</label>
+                <input type="password" id="current-password" placeholder="请输入当前密码">
+            </div>
+
+            <div class="settings-item">
+                <label for="new-password">新密码</label>
+                <input type="password" id="new-password" placeholder="请输入新密码（至少8位）">
+            </div>
+
+            <div class="settings-item">
+                <label for="confirm-password">确认新密码</label>
+                <input type="password" id="confirm-password" placeholder="请再次输入新密码">
+            </div>
+
+            <div class="button-group">
+                <button class="btn">修改密码</button>
+                <button class="btn btn-secondary">取消</button>
+            </div>
+
+            <div class="info-box">
+                <h3>💡 密码安全提示</h3>
+                <p>• 建议使用字母、数字和特殊字符的组合</p>
+                <p>• 密码长度至少8位</p>
+                <p>• 定期更换密码，建议每3个月更换一次</p>
+                <p>• 不要使用与其他网站相同的密码</p>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>📊 系统偏好设置</h2>
+            
+            <div class="settings-item">
+                <label for="language">界面语言</label>
+                <select id="language">
+                    <option value="zh-CN" selected>简体中文</option>
+                    <option value="en-US">English</option>
+                </select>
+            </div>
+
+            <div class="settings-item">
+                <label for="timezone">时区设置</label>
+                <select id="timezone">
+                    <option value="Asia/Shanghai" selected>中国标准时间 (UTC+8)</option>
+                    <option value="UTC">协调世界时 (UTC)</option>
+                </select>
+            </div>
+
+            <div class="settings-item">
+                <label for="date-format">日期格式</label>
+                <select id="date-format">
+                    <option value="YYYY-MM-DD" selected>2024-12-31</option>
+                    <option value="DD/MM/YYYY">31/12/2024</option>
+                    <option value="MM/DD/YYYY">12/31/2024</option>
+                </select>
+            </div>
+
+            <div class="settings-item">
+                <label for="auto-backup">自动备份频率</label>
+                <select id="auto-backup">
+                    <option value="daily">每天</option>
+                    <option value="weekly" selected>每周</option>
+                    <option value="monthly">每月</option>
+                    <option value="never">不自动备份</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button class="btn">保存偏好设置</button>
+            </div>
+        </div>
+
+        <div class="system-status">
+            <div class="status-item">
+                <div class="status-value">1,248</div>
+                <div class="status-label">香梨批次记录</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value">356</div>
+                <div class="status-label">二维码标签</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value">98.7%</div>
+                <div class="status-label">系统可用率</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value">2.3 GB</div>
+                <div class="status-label">数据存储</div>
+            </div>
+        </div>
+
+        <div class="version-info">
+            <h3>📱 系统版本说明</h3>
+            <div class="version-number">v1.0</div>
+            <div class="update-date">最后更新：2024年12月31日</div>
+            
+            <div style="margin-top: 15px; text-align: left;">
+                <p><strong>版本特性：</strong></p>
+                <p>• 库尔勒香梨全流程溯源管理</p>
+                <p>• 二维码生成与扫描功能</p>
+                <p>• 生产数据可视化分析</p>
+                <p>• 多用户权限管理系统</p>
+                <p>• 移动端适配优化</p>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button class="btn">检查更新</button>
+                <button class="btn btn-secondary" style="margin-left: 10px;">导出系统日志</button>
+                <button class="btn btn-danger" style="margin-left: 10px;">数据备份</button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2>⚠️ 高级设置（谨慎操作）</h2>
+            
+            <div class="button-group">
+                <button class="btn btn-secondary">清除缓存</button>
+                <button class="btn btn-secondary">数据库优化</button>
+                <button class="btn btn-danger">重置系统设置</button>
+            </div>
+
+            <div class="info-box" style="margin-top: 15px; background-color: #fff3cd; border-color: #ffeaa7;">
+                <h3 style="color: #856404;">⚠️ 警告</h3>
+                <p>• 重置系统设置将恢复所有配置到默认状态</p>
+                <p>• 此操作不会删除您的生产数据</p>
+                <p>• 建议在执行前先进行数据备份</p>
+            </div>
+        </div>
+    </div>
+</body>
+{%endblock%}

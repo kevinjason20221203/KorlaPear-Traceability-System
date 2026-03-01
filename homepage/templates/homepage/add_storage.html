@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>添加仓库 - 库尔勒香梨溯源系统</title>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background: bisque;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background-color: green;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .button-group .btn {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .required::after {
+            content: " *";
+            color: red;
+        }
+        
+        .help-text {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="bx bx-package"></i> 添加新仓库</h1>
+            <p>填写仓库信息，开始管理您的库存</p>
+        </div>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="storage_name" class="required">仓库名称</label>
+                <input type="text" id="storage_name" name="storage_name" required placeholder="例如：中心冷库、包装车间">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="storage_type" class="required">仓库类型</label>
+                    <select id="storage_type" name="storage_type" required>
+                        <option value="">请选择仓库类型</option>
+                        <option value="cold_storage">冷库</option>
+                        <option value="normal_storage">普通仓库</option>
+                        <option value="packing_area">包装区</option>
+                        <option value="temporary">临时存放区</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="capacity" class="required">容量(吨)</label>
+                    <input type="number" id="capacity" name="capacity" step="0.1" min="0" required placeholder="例如：10.5">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="address" class="required">仓库地址</label>
+                <textarea id="address" name="address" required placeholder="详细地址信息"></textarea>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="manager_name" class="required">仓库管理员</label>
+                    <input type="text" id="manager_name" name="manager_name" required placeholder="管理员姓名">
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact_phone" class="required">联系电话</label>
+                    <input type="tel" id="contact_phone" name="contact_phone" required placeholder="手机或固定电话">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="optimal_temperature">最佳温度(℃)</label>
+                    <input type="number" id="optimal_temperature" name="optimal_temperature" step="0.1" placeholder="例如：2.5">
+                    <div class="help-text">适用于冷库，普通仓库可不填</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="optimal_humidity">最佳湿度(%)</label>
+                    <input type="number" id="optimal_humidity" name="optimal_humidity" step="0.1" min="0" max="100" placeholder="例如：85.0">
+                    <div class="help-text">适用于需要湿度控制的仓库</div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <a href="{% url 'homepage:show-storage-list' %}" class="btn btn-secondary">
+                    <i class="bx bx-arrow-back"></i> 返回列表
+                </a>
+                <button type="submit" class="btn">
+                    <i class="bx bx-save"></i> 保存仓库信息
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

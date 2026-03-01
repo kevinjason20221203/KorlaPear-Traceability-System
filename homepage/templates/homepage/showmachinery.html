@@ -1,0 +1,166 @@
+{%extends 'homepage/base.html'%}
+{%block content%}
+<head>
+    <title>农机设备详情</title>
+<style>
+
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    color: #333;
+    text-align: center;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  .update-link,
+  .delete-link {
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #fff;
+    border-radius: 3px;
+    margin-right: 5px;
+  }
+
+  .update-link {
+    background-color: #3498db;
+  }
+
+  .delete-link {
+    background-color: #e74c3c;
+  }
+
+  .add-button {
+    display: inline-block;
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none;
+    border-radius: 3px;
+    margin-top: 20px;
+  }
+  
+  .update-link,
+  .delete-link {
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #fff;
+    border-radius: 3px;
+    margin-right: 5px;
+  }
+
+  .update-link {
+    background-color: #3498db;
+  }
+
+  .delete-link {
+    background-color: #e74c3c;
+  }
+
+  .add-button {
+    display: inline-block;
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none;
+    border-radius: 3px;
+    margin-top: 20px;
+  }
+  
+  .expenses-link {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+    text-align: center;
+    text-decoration: none;
+    border: 2px solid #3498db;
+    color: #3498db;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .expenses-link:hover {
+    background-color: #3498db;
+    color: #fff;
+  }
+  
+</style>
+</head>
+<body>
+    <h1>农机设备详情</h1>
+    <table>
+        <thead>
+            <tr>
+              <th>设备编号/车牌</th>
+              <th>设备名称</th>
+              <th>采购价格</th>
+              <th>采购日期</th>
+              <th>作业记录</th>
+              
+              <th>农事活动</th>
+
+              <th>维护与修理</th>
+
+              <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for machine in machinery %}
+            <tr>
+              <td>{{ machine.Number_plate }}</td>
+              <td>{{ machine.Equipment_name }}</td>
+              <td>{{ machine.Purchase_price }}</td>
+              <td>{{ machine.Purchase_date }}</td>
+              <td>{{ machine.Operation }}</td>
+              
+                
+                
+                <td>
+                  <a href="{% url 'homepage:show-machineryactivities' Number_plate=machine.Number_plate %}" class=expenses-link>活动</a>
+               </td>
+
+
+               
+               <td>
+                <a href="{% url 'homepage:show-machinerymaintenance' Number_plate=machine.Number_plate %}" class=expenses-link>维护</a>
+             </td>
+
+
+                <td>
+                <a href="{% url 'homepage:update-machinery' Number_plate=machine.Number_plate%}" class="update-link">编辑</a>
+                <a href="{% url 'homepage:delete-machinery' Number_plate=machine.Number_plate %}"class="delete-link">删除</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'homepage:add-machinery' %}" class="add-button">添加</a>
+</body>
+{%endblock%}

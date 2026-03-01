@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>仓储管理 - 库尔勒香梨溯源系统</title>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <style>
+        /* Google Font Link */
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        
+        body {
+            background: bisque;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background-color: green;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .action-buttons .btn {
+            white-space: nowrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .storage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .storage-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 15px;
+            }
+        }
+        
+        .storage-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .storage-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .storage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .storage-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .storage-type {
+            background-color: #e8f4fd;
+            color: #3498db;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .storage-info {
+            margin-bottom: 15px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .info-value {
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .usage-bar {
+            height: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .usage-fill {
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 5px;
+        }
+        
+        .usage-text {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .storage-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 14px;
+            flex: 1;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        @media (max-width: 480px) {
+            .storage-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .btn-small {
+                width: 100%;
+            }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="bx bx-package"></i> 仓储管理系统</h1>
+            <p>管理您的仓库库存，监控存储环境和库存状态</p>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="{% url 'homepage:mainpage' %}" class="btn btn-secondary">
+                <i class="bx bx-arrow-back"></i> 返回系统首页
+            </a>
+            <a href="{% url 'homepage:add-storage' %}" class="btn">
+                <i class="bx bx-plus"></i> 添加新仓库
+            </a>
+        </div>
+        
+        {% if storages %}
+            <div class="storage-grid">
+                {% for storage in storages %}
+                <div class="storage-card">
+                    <div class="storage-header">
+                        <div class="storage-name">{{ storage.storage_name }}</div>
+                        <div class="storage-type">
+                            {% if storage.storage_type == 'cold_storage' %}
+                                冷库
+                            {% elif storage.storage_type == 'normal_storage' %}
+                                普通仓库
+                            {% elif storage.storage_type == 'packing_area' %}
+                                包装区
+                            {% else %}
+                                临时存放区
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="storage-info">
+                        <div class="info-row">
+                            <span class="info-label">管理员：</span>
+                            <span class="info-value">{{ storage.manager_name }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">联系电话：</span>
+                            <span class="info-value">{{ storage.contact_phone }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">容量：</span>
+                            <span class="info-value">{{ storage.capacity }} 吨</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">当前使用：</span>
+                            <span class="info-value">{{ storage.current_usage }} 吨</span>
+                        </div>
+                        
+                        {% if storage.optimal_temperature %}
+                        <div class="info-row">
+                            <span class="info-label">最佳温度：</span>
+                            <span class="info-value">{{ storage.optimal_temperature }}℃</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if storage.optimal_humidity %}
+                        <div class="info-row">
+                            <span class="info-label">最佳湿度：</span>
+                            <span class="info-value">{{ storage.optimal_humidity }}%</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="usage-bar">
+                        <div class="usage-fill" style="width: {{ storage.get_usage_percentage }}%"></div>
+                    </div>
+                    <div class="usage-text">使用率：{{ storage.get_usage_percentage }}%</div>
+                    
+                    <div class="storage-actions">
+                        <a href="{% url 'homepage:show-storage-detail' storage.id %}" class="btn btn-small">
+                            <i class="bx bx-detail"></i> 查看详情
+                        </a>
+                        <a href="{% url 'homepage:add-storage-item' storage.id %}" class="btn btn-small">
+                            <i class="bx bx-plus"></i> 入库
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="bx bx-package"></i>
+                <h3>暂无仓库数据</h3>
+                <p>您还没有添加任何仓库，点击下方按钮开始创建</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>出库操作 - 库尔勒香梨溯源系统</title>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <style>
+        /* Google Font Link */
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        
+        body {
+            background: bisque;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background-color: #ffc107;
+            color: #212529;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .confirmation-container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .confirmation-header {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+        
+        .confirmation-header h2 {
+            color: #dc3545;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .warning-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .warning-box p {
+            color: #856404;
+            margin-bottom: 5px;
+        }
+        
+        .item-details {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .detail-section {
+            margin-bottom: 20px;
+        }
+        
+        .detail-section h3 {
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 18px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 5px;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .detail-item {
+            background: white;
+            border-radius: 4px;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .detail-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .quality-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        .quality-premium { background-color: #28a745; color: white; }
+        .quality-grade_a { background-color: #17a2b8; color: white; }
+        .quality-grade_b { background-color: #ffc107; color: #212529; }
+        .quality-grade_c { background-color: #dc3545; color: white; }
+        
+        .storage-info {
+            background: #e8f4fd;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .info-label {
+            color: #0066cc;
+            font-weight: 500;
+        }
+        
+        .info-value {
+            color: #004085;
+            font-weight: 600;
+        }
+        
+        .form-container {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-group textarea:focus {
+            border-color: #4CAF50;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .btn-large {
+            padding: 12px 30px;
+            font-size: 16px;
+            flex: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 15px;
+            }
+            
+            .confirmation-container {
+                padding: 20px;
+            }
+            
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn-large {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="bx bx-log-out"></i> 出库操作</h1>
+            <p>确认将物品从仓库中移出，记录出库信息</p>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="{% url 'homepage:show-storage-detail' storage.id %}" class="btn btn-secondary">
+                <i class="bx bx-arrow-back"></i> 返回仓库详情
+            </a>
+        </div>
+        
+        <div class="confirmation-container">
+            <div class="confirmation-header">
+                <h2><i class="bx bx-error"></i> 确认出库操作</h2>
+            </div>
+            
+            <div class="warning-box">
+                <h3><i class="bx bx-error-circle"></i> 重要提示</h3>
+                <p>• 出库操作将更新仓库使用量，减少当前库存</p>
+                <p>• 出库后物品将不再显示在仓库库存中</p>
+                <p>• 出库时间将被记录，用于计算存储时长</p>
+                <p>• 此操作不可逆，请确认后再执行</p>
+            </div>
+            
+            <div class="item-details">
+                <div class="detail-section">
+                    <h3><i class="bx bx-package"></i> 物品信息</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">批次编号</div>
+                            <div class="detail-value">{{ storage_item.livestock.Tag_number }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">产品类型</div>
+                            <div class="detail-value">{{ storage_item.livestock.Animal_type }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">数量</div>
+                            <div class="detail-value">{{ storage_item.quantity|floatformat:2 }} 公斤</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">单价</div>
+                            <div class="detail-value">{{ storage_item.unit_price|floatformat:2 }} 元/公斤</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">总价值</div>
+                            <div class="detail-value">{{ storage_item.total_value|floatformat:2 }} 元</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">质量等级</div>
+                            <div class="detail-value">
+                                <span class="quality-badge quality-{{ storage_item.quality_grade }}">
+                                    {% if storage_item.quality_grade == 'premium' %}
+                                        特级
+                                    {% elif storage_item.quality_grade == 'grade_a' %}
+                                        一级
+                                    {% elif storage_item.quality_grade == 'grade_b' %}
+                                        二级
+                                    {% else %}
+                                        三级
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">入库时间</div>
+                            <div class="detail-value">{{ storage_item.date_stored|date:"Y-m-d H:i" }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">存储时长</div>
+                            <div class="detail-value">
+                                {% if storage_item.storage_duration %}
+                                    {{ storage_item.storage_duration|floatformat:1 }} 小时
+                                {% else %}
+                                    在库中
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if storage_item.storage_temperature or storage_item.storage_humidity %}
+                <div class="detail-section">
+                    <h3><i class="bx bx-thermometer"></i> 存储环境</h3>
+                    <div class="detail-grid">
+                        {% if storage_item.storage_temperature %}
+                        <div class="detail-item">
+                            <div class="detail-label">存储温度</div>
+                            <div class="detail-value">{{ storage_item.storage_temperature|floatformat:2 }}℃</div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if storage_item.storage_humidity %}
+                        <div class="detail-item">
+                            <div class="detail-label">存储湿度</div>
+                            <div class="detail-value">{{ storage_item.storage_humidity|floatformat:2 }}%</div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if storage_item.notes %}
+                        <div class="detail-item" style="grid-column: span 2;">
+                            <div class="detail-label">入库备注</div>
+                            <div class="detail-value">{{ storage_item.notes }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="storage-info">
+                <div class="info-row">
+                    <span class="info-label">所属仓库：</span>
+                    <span class="info-value">{{ storage.storage_name }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">当前使用率：</span>
+                    <span class="info-value">{{ storage.get_usage_percentage }}%</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">出库后使用率：</span>
+                    <span class="info-value">
+                        {% with new_usage=storage.current_usage|add:"-storage_item.quantity" %}
+                            {% if new_usage < 0 %}
+                                0%
+                            {% else %}
+                                {{ new_usage|div:storage.capacity|mul:100|floatformat:2 }}%
+                            {% endif %}
+                        {% endwith %}
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">出库后剩余容量：</span>
+                    <span class="info-value">
+                        {% with new_usage=storage.current_usage|add:"-storage_item.quantity" %}
+                            {% if new_usage < 0 %}
+                                {{ storage.capacity }} 吨
+                            {% else %}
+                                {{ storage.capacity|add:"-new_usage" }} 吨
+                            {% endif %}
+                        {% endwith %}
+                    </span>
+                </div>
+            </div>
+            
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="outbound_notes">
+                            <i class="bx bx-edit"></i> 出库备注（可选）
+                        </label>
+                        <textarea id="outbound_notes" name="outbound_notes" 
+                                  placeholder="请输入出库原因、去向或其他相关信息..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="{% url 'homepage:show-storage-detail' storage.id %}" class="btn btn-large btn-secondary">
+                        <i class="bx bx-x"></i> 取消出库
+                    </a>
+                    <button type="submit" class="btn btn-large btn-danger">
+                        <i class="bx bx-check"></i> 确认出库
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

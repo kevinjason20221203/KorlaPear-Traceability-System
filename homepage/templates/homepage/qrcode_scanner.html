@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维码扫描 - 库尔勒香梨溯源系统</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 15px;
+        }
+        .header h1 {
+            color: #333;
+            margin: 0;
+        }
+        .scanner-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        #scanner-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        #scanner-video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            background-color: #000;
+        }
+        .scanner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .scanner-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+        .result-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+        .result-section.active {
+            display: block;
+        }
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .result-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 3px solid #4CAF50;
+        }
+        .result-item strong {
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .result-item span {
+            color: #666;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+        .loading.active {
+            display: block;
+        }
+        .instructions {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+        .instructions h4 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        .instructions ul {
+            margin-bottom: 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        .error-message {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            display: none;
+        }
+        .error-message.active {
+            display: block;
+        }
+        .scan-type-selector {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .scan-type-selector label {
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .scan-type-selector select {
+            padding: 8px 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍐 库尔勒香梨二维码扫描系统</h1>
+            <p>扫描产品二维码，查看完整溯源信息</p>
+        </div>
+        
+        <div class="scan-type-selector">
+            <label for="scan-type">扫描类型：</label>
+            <select id="scan-type">
+                <option value="consumer">消费者查询</option>
+                <option value="production">生产环节</option>
+                <option value="storage">仓储环节</option>
+                <option value="logistics">物流环节</option>
+                <option value="retail">零售环节</option>
+            </select>
+        </div>
+        
+        <div class="scanner-section">
+            <h2>请扫描二维码</h2>
+            <div id="scanner-container">
+                <video id="scanner-video" playsinline></video>
+                <div class="scanner-overlay"></div>
+            </div>
+            
+            <div class="scanner-controls">
+                <button id="start-scanner" class="btn btn-primary">启动摄像头</button>
+                <button id="stop-scanner" class="btn btn-danger" disabled>停止扫描</button>
+                <button id="manual-input" class="btn btn-secondary">手动输入</button>
+                <a href="{% url 'homepage:show-livestock' %}" class="btn btn-secondary">返回批次列表</a>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">
+            <p>正在处理二维码...</p>
+            <div style="width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #4CAF50; border-radius: 50%; margin: 20px auto; animation: spin 1s linear infinite;"></div>
+        </div>
+        
+        <div class="error-message" id="error-message">
+            <strong>错误：</strong> <span id="error-text"></span>
+        </div>
+        
+        <div class="result-section" id="result-section">
+            <h2>扫描结果</h2>
+            <div class="result-grid" id="result-grid">
+                <!-- 扫描结果将通过JavaScript动态填充 -->
+            </div>
+            <div class="scanner-controls" style="margin-top: 20px;">
+                <button id="scan-again" class="btn btn-primary">继续扫描</button>
+                <a href="#" id="view-details" class="btn btn-secondary" target="_blank">查看详情</a>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h4>使用说明：</h4>
+            <ul>
+                <li>点击"启动摄像头"按钮开始扫描二维码</li>
+                <li>将二维码对准摄像头，系统会自动识别</li>
+                <li>扫描成功后会自动显示产品溯源信息</li>
+                <li>如需手动输入，请点击"手动输入"按钮</li>
+                <li>不同扫描类型会记录不同的操作日志</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let scanner = null;
+        let currentScanType = 'consumer';
+        
+        // DOM元素
+        const videoElement = document.getElementById('scanner-video');
+        const startButton = document.getElementById('start-scanner');
+        const stopButton = document.getElementById('stop-scanner');
+        const manualInputButton = document.getElementById('manual-input');
+        const loadingElement = document.getElementById('loading');
+        const errorElement = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+        const resultSection = document.getElementById('result-section');
+        const resultGrid = document.getElementById('result-grid');
+        const scanAgainButton = document.getElementById('scan-again');
+        const viewDetailsButton = document.getElementById('view-details');
+        const scanTypeSelect = document.getElementById('scan-type');
+        
+        // 更新扫描类型
+        scanTypeSelect.addEventListener('change', function() {
+            currentScanType = this.value;
+        });
+        
+        // 启动摄像头扫描
+        startButton.addEventListener('click', async function() {
+            try {
+                startButton.disabled = true;
+                stopButton.disabled = false;
+                
+                // 请求摄像头权限
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' } 
+                });
+                
+                videoElement.srcObject = stream;
+                videoElement.play();
+                
+                // 初始化二维码扫描器
+                scanner = new Worker('/static/js/qr-scanner-worker.js');
+                
+                scanner.onmessage = function(event) {
+                    if (event.data.type === 'qrCodeFound') {
+                        const qrCode = event.data.data;
+                        processScannedQRCode(qrCode);
+                    }
+                };
+                
+                // 开始扫描
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                
+                function scanFrame() {
+                    if (!scanner) return;
+                    
+                    canvas.width = videoElement.videoWidth;
+                    canvas.height = videoElement.videoHeight;
+                    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                    
+                    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                    scanner.postMessage({
+                        type: 'scan',
+                        imageData: imageData
+                    });
+                    
+                    requestAnimationFrame(scanFrame);
+                }
+                
+                scanFrame();
+                
+            } catch (error) {
+                showError('无法访问摄像头：' + error.message);
+                startButton.disabled = false;
+                stopButton.disabled = true;
+            }
+        });
+        
+        // 停止扫描
+        stopButton.addEventListener('click', function() {
+            if (scanner) {
+                scanner.terminate();
+                scanner = null;
+            }
+            
+            if (videoElement.srcObject) {
+                videoElement.srcObject.getTracks().forEach(track => track.stop());
+                videoElement.srcObject = null;
+            }
+            
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        });
+        
+        // 手动输入
+        manualInputButton.addEventListener('click', function() {
+            const serialNumber = prompt('请输入二维码序列号：');
+            if (serialNumber && serialNumber.trim()) {
+                processScannedQRCode(serialNumber.trim());
+            }
+        });
+        
+        // 处理扫描到的二维码
+        async function processScannedQRCode(serialNumber) {
+            try {
+                showLoading();
+                hideError();
+                
+                // 发送扫描数据到服务器
+                const response = await fetch('/process_qrcode_scan/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        serial_number: serialNumber,
+                        scan_type: currentScanType,
+                        scanner_location: '扫描站点'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayScanResult(data);
+                } else {
+                    showError(data.error || '扫描失败');
+                }
+                
+            } catch (error) {
+                showError('网络错误：' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // 显示扫描结果
+        function displayScanResult(data) {
+            resultGrid.innerHTML = `
+                <div class="result-item">
+                    <strong>二维码序列号</strong>
+                    <span>${data.serial_number}</span>
+                </div>
+                <div class="result-item">
+                    <strong>批次编号</strong>
+                    <span>${data.livestock.tag_number}</span>
+                </div>
+                <div class="result-item">
+                    <strong>产品规格</strong>
+                    <span>${data.livestock.breed}</span>
+                </div>
+                <div class="result-item">
+                    <strong>物流类型</strong>
+                    <span>${data.livestock.animal_type}</span>
+                </div>
+                <div class="result-item">
+                    <strong>存储时长</strong>
+                    <span>${data.livestock.age} 天</span>
+                </div>
+                <div class="result-item">
+                    <strong>扫描时间</strong>
+                    <span>${new Date(data.scan_time).toLocaleString('zh-CN')}</span>
+                </div>
+            `;
+            
+            viewDetailsButton.href = `/trace/${data.serial_number}/`;
+            resultSection.classList.add('active');
+            
+            // 停止扫描
+            if (scanner) {
+                scanner.terminate();
+                scanner = null;
+            }
+            
+            if (videoElement.srcObject) {
+                videoElement.srcObject.getTracks().forEach(track => track.stop());
+                videoElement.srcObject = null;
+            }
+            
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        }
+        
+        // 继续扫描
+        scanAgainButton.addEventListener('click', function() {
+            resultSection.classList.remove('active');
+            startButton.click();
+        });
+        
+        // 工具函数
+        function showLoading() {
+            loadingElement.classList.add('active');
+        }
+        
+        function hideLoading() {
+            loadingElement.classList.remove('active');
+        }
+        
+        function showError(message) {
+            errorText.textContent = message;
+            errorElement.classList.add('active');
+        }
+        
+        function hideError() {
+            errorElement.classList.remove('active');
+        }
+        
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        // CSS动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 简化版本：如果没有Worker，使用简单版本
+        if (typeof Worker === 'undefined') {
+            console.warn('Web Workers not supported, using simple scanner');
+            
+            startButton.addEventListener('click', async function() {
+                try {
+                    startButton.disabled = true;
+                    stopButton.disabled = false;
+                    
+                    const stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { facingMode: 'environment' } 
+                    });
+                    
+                    videoElement.srcObject = stream;
+                    videoElement.play();
+                    
+                    // 简单版本：提示用户手动输入
+                    setTimeout(() => {
+                        alert('高级扫描功能需要Web Workers支持。请使用手动输入功能。');
+                    }, 1000);
+                    
+                } catch (error) {
+                    showError('无法访问摄像头：' + error.message);
+                    startButton.disabled = false;
+                    stopButton.disabled = true;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

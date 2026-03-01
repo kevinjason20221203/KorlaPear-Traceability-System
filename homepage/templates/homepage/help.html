@@ -1,0 +1,237 @@
+{%extends 'homepage/base.html'%}
+{%block content%}
+<head>
+    <style>
+        body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+}
+
+.help-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h3, h4, p {
+    color: #333;
+}
+
+.feature {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border-left: 4px solid #4CAF50;
+}
+
+.sub-feature {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 8px;
+    padding-left: 20px;
+    position: relative;
+}
+
+li:before {
+    content: "•";
+    color: #4CAF50;
+    font-size: 20px;
+    position: absolute;
+    left: 0;
+    top: -2px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.step-number {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 24px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.qr-code {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #e8f5e9;
+    border-radius: 8px;
+    border: 2px dashed #4CAF50;
+}
+
+.qr-code img {
+    max-width: 200px;
+    margin: 10px 0;
+}
+
+    </style>
+</head>
+<body>
+    <div class="help-container">
+        <section class="feature">
+            <h3>📱 系统简介</h3>
+            <p><strong>《库尔勒香梨生产溯源管理系统》</strong>是一款基于二维码技术的全流程监管平台，专为库尔勒香梨产业设计。系统通过数字化手段实现从果园种植、采摘批次管理、物流追踪到终端销售的全链条信息追溯。</p>
+            
+            <div class="qr-code">
+                <h4>📊 核心功能亮点</h4>
+                <p>• 一物一码：每个香梨批次生成唯一溯源码</p>
+                <p>• 全流程监控：种植、采摘、运输、销售全程可追溯</p>
+                <p>• 数据可视化：生产数据实时统计与图表分析</p>
+                <p>• 移动端适配：支持手机扫码查询溯源信息</p>
+            </div>
+        </section>
+
+        <section class="feature">
+            <h3>🚀 快速上手</h3>
+            <p>按照以下三个步骤，快速开始使用本系统：</p>
+
+            <article class="sub-feature">
+                <h4><span class="step-number">1</span> 香梨种植管理</h4>
+                <ul>
+                    <li>进入【种植档案】模块，点击"添加新地块"按钮</li>
+                    <li>填写果园地块基础信息：地块名称、位置、面积、种植日期</li>
+                    <li>记录种植品种、种植密度、预计采摘时间</li>
+                    <li>系统自动生成地块唯一编号，用于后续批次关联</li>
+                </ul>
+            </article>
+
+            <article class="sub-feature">
+                <h4><span class="step-number">2</span> 采摘批次管理</h4>
+                <ul>
+                    <li>进入【采摘批次】模块，为每一批采摘的香梨创建记录</li>
+                    <li>填写批次信息：采摘日期、采摘地块、采摘人员、预估产量</li>
+                    <li>系统自动生成唯一的二维码溯源码</li>
+                    <li>打印二维码标签，粘贴到包装箱上</li>
+                    <li>记录分级标准：特级、一级、二级等品质分类</li>
+                </ul>
+            </article>
+
+            <article class="sub-feature">
+                <h4><span class="step-number">3</span> 物流追踪记录</h4>
+                <ul>
+                    <li>进入【物流追踪记录】模块，补充运输信息</li>
+                    <li>填写运输车辆信息、司机联系方式、出发时间</li>
+                    <li>记录目的地信息：批发市场、超市、电商仓库等</li>
+                    <li>实时更新运输状态：在途、已送达、签收完成</li>
+                    <li>消费者扫码即可查看完整的生产流通轨迹</li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="feature">
+            <h3>❓ 常见问题</h3>
+
+            <article class="sub-feature">
+                <h4>如何扫码查询溯源信息？</h4>
+                <ul>
+                    <li><strong>消费者端</strong>：使用微信、支付宝或任意扫码工具，扫描包装箱上的二维码</li>
+                    <li><strong>管理员端</strong>：在系统后台输入溯源码或扫描二维码，查看完整生产记录</li>
+                    <li><strong>移动端适配</strong>：系统支持手机浏览器访问，随时随地查询信息</li>
+                </ul>
+            </article>
+
+            <article class="sub-feature">
+                <h4>如何导出生产报表？</h4>
+                <ul>
+                    <li><strong>数据导出</strong>：在各模块列表页面，点击"导出Excel"按钮</li>
+                    <li><strong>报表类型</strong>：支持导出种植记录、采摘批次、物流追踪、销售数据等</li>
+                    <li><strong>时间筛选</strong>：可按年、月、日筛选数据后导出</li>
+                    <li><strong>格式支持</strong>：Excel、PDF、CSV等多种格式</li>
+                </ul>
+            </article>
+
+            <article class="sub-feature">
+                <h4>系统数据安全吗？</h4>
+                <ul>
+                    <li><strong>权限管理</strong>：多级用户权限控制，数据按权限分级查看</li>
+                    <li><strong>数据备份</strong>：每日自动备份，支持手动备份与恢复</li>
+                    <li><strong>操作日志</strong>：所有数据操作均有详细日志记录</li>
+                    <li><strong>隐私保护</strong>：消费者扫码仅显示必要信息，敏感数据加密存储</li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="feature">
+            <h3>📞 技术支持</h3>
+            <table>
+                <tr>
+                    <th>服务类型</th>
+                    <th>联系方式</th>
+                    <th>服务时间</th>
+                </tr>
+                <tr>
+                    <td>系统使用咨询</td>
+                    <td>客服热线：400-123-4567</td>
+                    <td>工作日 9:00-18:00</td>
+                </tr>
+                <tr>
+                    <td>技术问题反馈</td>
+                    <td>邮箱：support@kuerle-pear.com</td>
+                    <td>24小时内回复</td>
+                </tr>
+                <tr>
+                    <td>紧急故障处理</td>
+                    <td>技术经理：138-0013-8000</td>
+                    <td>7×24小时</td>
+                </tr>
+                <tr>
+                    <td>培训服务</td>
+                    <td>培训专员：139-0013-9000</td>
+                    <td>预约制</td>
+                </tr>
+            </table>
+            
+            <div class="sub-feature" style="margin-top: 20px;">
+                <h4>💡 使用建议</h4>
+                <ul>
+                    <li>建议定期备份重要数据，特别是采摘季节前后</li>
+                    <li>新员工上岗前，请安排系统操作培训</li>
+                    <li>二维码标签建议使用防水防油材质，确保可读性</li>
+                    <li>定期检查网络连接，确保数据实时同步</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</body>
+{%endblock%}

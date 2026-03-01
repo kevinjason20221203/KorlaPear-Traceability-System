@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>仓库详情 - 库尔勒香梨溯源系统</title>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <style>
+        /* Google Font Link */
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        
+        body {
+            background: bisque;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background-color: green;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-info {
+            background-color: #17a2b8;
+        }
+        
+        .btn-info:hover {
+            background-color: #138496;
+        }
+        
+        .btn-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+        
+        .storage-detail {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .storage-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .storage-type {
+            background-color: #e8f4fd;
+            color: #3498db;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .detail-card {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 15px;
+        }
+        
+        .detail-card h3 {
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 5px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .info-value {
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .usage-section {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .usage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .usage-bar {
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .usage-fill {
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .usage-text {
+            text-align: center;
+            font-size: 16px;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        
+        .usage-stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        
+        .stat-item {
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 5px 0;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .items-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .items-table th {
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .items-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+        
+        .items-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .quality-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        .quality-premium { background-color: #28a745; color: white; }
+        .quality-grade_a { background-color: #17a2b8; color: white; }
+        .quality-grade_b { background-color: #ffc107; color: #212529; }
+        .quality-grade_c { background-color: #dc3545; color: white; }
+        
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 14px;
+            border-radius: 3px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 15px;
+            }
+            
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .usage-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .items-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="bx bx-package"></i> 仓库详情</h1>
+            <p>查看仓库详细信息、使用情况和存储物品</p>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="{% url 'homepage:show-storage-list' %}" class="btn btn-secondary">
+                <i class="bx bx-arrow-back"></i> 返回仓库列表
+            </a>
+            <a href="{% url 'homepage:add-storage-item' storage.id %}" class="btn">
+                <i class="bx bx-plus"></i> 入库新物品
+            </a>
+        </div>
+        
+        <div class="storage-detail">
+            <div class="detail-header">
+                <div class="storage-title">{{ storage.storage_name }}</div>
+                <div class="storage-type">
+                    {% if storage.storage_type == 'cold_storage' %}
+                        冷库
+                    {% elif storage.storage_type == 'normal_storage' %}
+                        普通仓库
+                    {% elif storage.storage_type == 'packing_area' %}
+                        包装区
+                    {% else %}
+                        临时存放区
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="detail-grid">
+                <div class="detail-card">
+                    <h3><i class="bx bx-user"></i> 管理信息</h3>
+                    <div class="info-row">
+                        <span class="info-label">管理员：</span>
+                        <span class="info-value">{{ storage.manager_name }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">联系电话：</span>
+                        <span class="info-value">{{ storage.contact_phone }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">仓库地址：</span>
+                        <span class="info-value">{{ storage.address }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">启用状态：</span>
+                        <span class="info-value">
+                            {% if storage.is_active %}
+                                <span style="color: #28a745;">已启用</span>
+                            {% else %}
+                                <span style="color: #dc3545;">已停用</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="detail-card">
+                    <h3><i class="bx bx-cube"></i> 容量信息</h3>
+                    <div class="info-row">
+                        <span class="info-label">总容量：</span>
+                        <span class="info-value">{{ storage.capacity }} 吨</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">当前使用：</span>
+                        <span class="info-value">{{ storage.current_usage }} 吨</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">剩余容量：</span>
+                        <span class="info-value">{{ storage.capacity|add:"-storage.current_usage" }} 吨</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">创建时间：</span>
+                        <span class="info-value">{{ storage.created_at|date:"Y-m-d H:i" }}</span>
+                    </div>
+                </div>
+                
+                {% if storage.optimal_temperature or storage.optimal_humidity %}
+                <div class="detail-card">
+                    <h3><i class="bx bx-thermometer"></i> 环境参数</h3>
+                    {% if storage.optimal_temperature %}
+                    <div class="info-row">
+                        <span class="info-label">最佳温度：</span>
+                        <span class="info-value">{{ storage.optimal_temperature }}℃</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if storage.optimal_humidity %}
+                    <div class="info-row">
+                        <span class="info-label">最佳湿度：</span>
+                        <span class="info-value">{{ storage.optimal_humidity }}%</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if storage.latitude and storage.longitude %}
+                    <div class="info-row">
+                        <span class="info-label">地理位置：</span>
+                        <span class="info-value">{{ storage.latitude }}, {{ storage.longitude }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="usage-section">
+                <div class="usage-header">
+                    <h3><i class="bx bx-trending-up"></i> 仓库使用率</h3>
+                    <span class="usage-text">当前使用率：{{ usage_percentage }}%</span>
+                </div>
+                
+                <div class="usage-bar">
+                    <div class="usage-fill" style="width: {{ usage_percentage }}%"></div>
+                </div>
+                
+                <div class="usage-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">{{ storage.capacity }}</div>
+                        <div class="stat-label">总容量(吨)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">{{ storage.current_usage }}</div>
+                        <div class="stat-label">已使用(吨)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">{{ storage.capacity|add:"-storage.current_usage" }}</div>
+                        <div class="stat-label">剩余(吨)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">{{ usage_percentage }}</div>
+                        <div class="stat-label">使用率(%)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="items-section">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="bx bx-package"></i> 存储物品列表
+                    <span style="font-size: 14px; color: #666; margin-left: 10px;">
+                        (共 {{ storage_items.count }} 个物品)
+                    </span>
+                </div>
+            </div>
+            
+            {% if storage_items %}
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th>批次编号</th>
+                            <th>产品类型</th>
+                            <th>数量(公斤)</th>
+                            <th>单价(元)</th>
+                            <th>总价值(元)</th>
+                            <th>质量等级</th>
+                            <th>入库时间</th>
+                            <th>存储时长</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in storage_items %}
+                        <tr>
+                            <td>
+                                <strong>{{ item.livestock.Tag_number }}</strong>
+                                <br>
+                                <small style="color: #666;">{{ item.livestock.Animal_type }}</small>
+                            </td>
+                            <td>{{ item.livestock.Animal_type }}</td>
+                            <td>{{ item.quantity|floatformat:2 }}</td>
+                            <td>{{ item.unit_price|floatformat:2 }}</td>
+                            <td>{{ item.total_value|floatformat:2 }}</td>
+                            <td>
+                                <span class="quality-badge quality-{{ item.quality_grade }}">
+                                    {% if item.quality_grade == 'premium' %}
+                                        特级
+                                    {% elif item.quality_grade == 'grade_a' %}
+                                        一级
+                                    {% elif item.quality_grade == 'grade_b' %}
+                                        二级
+                                    {% else %}
+                                        三级
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>{{ item.date_stored|date:"Y-m-d H:i" }}</td>
+                            <td>
+                                {% if item.storage_duration %}
+                                    {{ item.storage_duration|floatformat:1 }}小时
+                                {% else %}
+                                    在库中
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'homepage:remove-storage-item' item.id %}" class="btn btn-small btn-warning">
+                                    <i class="bx bx-log-out"></i> 出库
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <i class="bx bx-package"></i>
+                    <h3>暂无存储物品</h3>
+                    <p>该仓库还没有存储任何物品，点击上方"入库新物品"按钮开始添加</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

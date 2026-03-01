@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>物流追踪 - 库尔勒香梨溯源系统</title>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background: bisque;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background-color: green;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+        }
+        
+        .batch-info {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 15px;
+            }
+            
+            .batch-info {
+                padding: 15px;
+            }
+            
+            .timeline {
+                padding: 20px;
+            }
+            
+            .timeline-items {
+                padding-left: 20px;
+            }
+            
+            .timeline-items::before {
+                left: 5px;
+            }
+            
+            .timeline-item::before {
+                left: -30px;
+            }
+            
+            .item-details {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .timeline-items {
+                padding-left: 15px;
+            }
+            
+            .timeline-items::before {
+                left: 3px;
+            }
+            
+            .timeline-item::before {
+                left: -25px;
+                width: 15px;
+                height: 15px;
+            }
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .timeline {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .timeline-title {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+        
+        .record-count {
+            background: #e8f4fd;
+            color: #3498db;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .timeline-items {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline-items::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #3498db;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -40px;
+            top: 25px;
+            width: 20px;
+            height: 20px;
+            background: #3498db;
+            border-radius: 50%;
+            border: 4px solid white;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .item-time {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .item-status {
+            background: #4CAF50;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .item-location {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .item-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="bx bx-map"></i> 物流追踪系统</h1>
+            <p>追踪采摘批次从果园到消费者的完整物流过程</p>
+        </div>
+        
+        <div class="batch-info">
+            <h2>采摘批次信息</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">批次编号：</span>
+                    <span class="info-value">{{ livestock.Tag_number }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">物流类型：</span>
+                    <span class="info-value">{{ livestock.Animal_type }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">存储时长：</span>
+                    <span class="info-value">{{ livestock.Age }} 天</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">产品规格：</span>
+                    <span class="info-value">{{ livestock.Breed }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="{% url 'homepage:show-livestock' %}" class="btn btn-secondary">
+                <i class="bx bx-arrow-back"></i> 返回批次列表
+            </a>
+            <a href="{% url 'homepage:add-logistics-tracking' livestock.Tag_number %}" class="btn">
+                <i class="bx bx-plus"></i> 添加物流节点
+            </a>
+            <a href="{% url 'homepage:logistics-timeline' livestock.Tag_number %}" class="btn">
+                <i class="bx bx-timeline"></i> 查看时间线
+            </a>
+        </div>
+        
+        <div class="timeline">
+            <div class="timeline-header">
+                <div class="timeline-title">物流追踪记录</div>
+                <div class="record-count">{{ record_count }} 条记录</div>
+            </div>
+            
+            {% if tracking_records %}
+                <div class="timeline-items">
+                    {% for record in tracking_records %}
+                    <div class="timeline-item">
+                        <div class="item-header">
+                            <div class="item-time">{{ record.timestamp|date:"Y-m-d H:i" }}</div>
+                            <div class="item-status">{{ record.get_status_display }}</div>
+                        </div>
+                        
+                        <div class="item-location">
+                            <i class="bx bx-map-pin"></i> {{ record.location }}
+                            <span style="font-size: 14px; color: #666; margin-left: 10px;">
+                                ({{ record.get_location_type_display }})
+                            </span>
+                        </div>
+                        
+                        {% if record.operation_notes %}
+                        <div style="margin: 10px 0; padding: 10px; background: white; border-radius: 4px;">
+                            {{ record.operation_notes }}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="item-details">
+                            {% if record.temperature %}
+                            <div class="detail-item">
+                                <span>温度：</span>
+                                <span>{{ record.temperature }}℃</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if record.humidity %}
+                            <div class="detail-item">
+                                <span>湿度：</span>
+                                <span>{{ record.humidity }}%</span>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="detail-item">
+                                <span>操作员：</span>
+                                <span>{{ record.operator.username|default:"系统" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="bx bx-map"></i>
+                    <h3>暂无物流追踪记录</h3>
+                    <p>该采摘批次还没有物流追踪记录，点击"添加物流节点"按钮开始记录</p>
+                    <a href="{% url 'homepage:add-logistics-tracking' livestock.Tag_number %}" class="btn" style="margin-top: 20px;">
+                        <i class="bx bx-plus"></i> 添加第一条记录
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        
+        <a href="{% url 'homepage:show-livestock' %}" class="back-link">
+            <i class="bx bx-arrow-back"></i> 返回采摘批次列表
+        </a>
+    </div>
+</body>
+</html>

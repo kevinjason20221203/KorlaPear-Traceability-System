@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>入库新物品 - 库尔勒香梨溯源系统</title>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <style>
+        /* Google Font Link */
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        
+        body {
+            background: bisque;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background-color: green;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-header {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-header h2 {
+            color: #2c3e50;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .storage-info {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .info-value {
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.15s ease-in-out;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #4CAF50;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+        
+        .help-text {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .btn-large {
+            padding: 12px 30px;
+            font-size: 16px;
+        }
+        
+        .btn-cancel {
+            background-color: #6c757d;
+        }
+        
+        .btn-cancel:hover {
+            background-color: #5a6268;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 15px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn-large {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="bx bx-plus"></i> 入库新物品</h1>
+            <p>将采摘批次存储到仓库中，记录存储信息和环境参数</p>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="{% url 'homepage:show-storage-detail' storage.id %}" class="btn btn-secondary">
+                <i class="bx bx-arrow-back"></i> 返回仓库详情
+            </a>
+        </div>
+        
+        <div class="form-container">
+            <div class="form-header">
+                <h2><i class="bx bx-package"></i> 入库信息</h2>
+            </div>
+            
+            <div class="storage-info">
+                <div class="info-row">
+                    <span class="info-label">目标仓库：</span>
+                    <span class="info-value">{{ storage.storage_name }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">仓库类型：</span>
+                    <span class="info-value">
+                        {% if storage.storage_type == 'cold_storage' %}
+                            冷库
+                        {% elif storage.storage_type == 'normal_storage' %}
+                            普通仓库
+                        {% elif storage.storage_type == 'packing_area' %}
+                            包装区
+                        {% else %}
+                            临时存放区
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">当前使用率：</span>
+                    <span class="info-value">{{ storage.get_usage_percentage }}%</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">剩余容量：</span>
+                    <span class="info-value">{{ storage.capacity|add:"-storage.current_usage" }} 吨</span>
+                </div>
+            </div>
+            
+            {% if available_livestock %}
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="livestock" class="required">选择采摘批次</label>
+                        <select id="livestock" name="livestock" required>
+                            <option value="">请选择采摘批次</option>
+                            {% for livestock in available_livestock %}
+                            <option value="{{ livestock.Tag_number }}">
+                                {{ livestock.Tag_number }} - {{ livestock.Animal_type }} ({{ livestock.Breed }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <div class="help-text">选择要入库的采摘批次，只有尚未入库的批次才会显示</div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quantity" class="required">数量(公斤)</label>
+                            <input type="number" id="quantity" name="quantity" step="0.01" min="0.01" required>
+                            <div class="help-text">请输入入库数量，单位：公斤</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="unit_price" class="required">单价(元/公斤)</label>
+                            <input type="number" id="unit_price" name="unit_price" step="0.01" min="0" required>
+                            <div class="help-text">请输入每公斤的价格</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quality_grade" class="required">质量等级</label>
+                        <select id="quality_grade" name="quality_grade" required>
+                            <option value="">请选择质量等级</option>
+                            {% for value, label in quality_grade_choices %}
+                            <option value="{{ value }}">
+                                {% if value == 'premium' %}
+                                    特级
+                                {% elif value == 'grade_a' %}
+                                    一级
+                                {% elif value == 'grade_b' %}
+                                    二级
+                                {% else %}
+                                    三级
+                                {% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <div class="help-text">根据产品质量选择相应的等级</div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="storage_temperature">存储温度(℃)</label>
+                            <input type="number" id="storage_temperature" name="storage_temperature" step="0.1">
+                            <div class="help-text">可选，记录存储时的温度</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="storage_humidity">存储湿度(%)</label>
+                            <input type="number" id="storage_humidity" name="storage_humidity" step="0.1" min="0" max="100">
+                            <div class="help-text">可选，记录存储时的湿度</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">备注</label>
+                        <textarea id="notes" name="notes" placeholder="可输入入库相关的备注信息..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <a href="{% url 'homepage:show-storage-detail' storage.id %}" class="btn btn-large btn-cancel">
+                            取消
+                        </a>
+                        <button type="submit" class="btn btn-large">
+                            <i class="bx bx-save"></i> 确认入库
+                        </button>
+                    </div>
+                </form>
+            {% else %}
+                <div class="empty-state">
+                    <i class="bx bx-package"></i>
+                    <h3>无可用的采摘批次</h3>
+                    <p>所有采摘批次都已入库，或者没有可用的采摘批次。</p>
+                    <p>请先创建采摘批次，或者将已入库的批次出库后再尝试。</p>
+                    <a href="{% url 'homepage:show-livestock' %}" class="btn" style="margin-top: 20px;">
+                        <i class="bx bx-plus"></i> 创建采摘批次
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script>
+        // 实时计算总价值
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityInput = document.getElementById('quantity');
+            const unitPriceInput = document.getElementById('unit_price');
+            
+            function calculateTotalValue() {
+                const quantity = parseFloat(quantityInput.value) || 0;
+                const unitPrice = parseFloat(unitPriceInput.value) || 0;
+                const totalValue = quantity * unitPrice;
+                
+                // 显示计算提示
+                const totalValueElement = document.getElementById('total-value-hint');
+                if (!totalValueElement) {
+                    const hint = document.createElement('div');
+                    hint.id = 'total-value-hint';
+                    hint.className = 'help-text';
+                    hint.style.color = '#28a745';
+                    hint.style.fontWeight = 'bold';
+                    unitPriceInput.parentNode.appendChild(hint);
+                }
+                
+                if (totalValue > 0) {
+                    document.getElementById('total-value-hint').textContent = 
+                        `总价值：${totalValue.toFixed(2)} 元`;
+                } else {
+                    document.getElementById('total-value-hint').textContent = '';
+                }
+            }
+            
+            if (quantityInput && unitPriceInput) {
+                quantityInput.addEventListener('input', calculateTotalValue);
+                unitPriceInput.addEventListener('input', calculateTotalValue);
+            }
+            
+            // 根据仓库类型设置默认环境参数
+            const storageType = "{{ storage.storage_type }}";
+            const temperatureInput = document.getElementById('storage_temperature');
+            const humidityInput = document.getElementById('storage_humidity');
+            
+            if (storageType === 'cold_storage') {
+                if (temperatureInput && !temperatureInput.value) {
+                    temperatureInput.value = '2.0';
+                }
+                if (humidityInput && !humidityInput.value) {
+                    humidityInput.value = '85.0';
+                }
+            } else if (storageType === 'packing_area') {
+                if (temperatureInput && !temperatureInput.value) {
+                    temperatureInput.value = '18.0';
+                }
+                if (humidityInput && !humidityInput.value) {
+                    humidityInput.value = '60.0';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

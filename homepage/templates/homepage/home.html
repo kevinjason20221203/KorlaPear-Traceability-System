@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>库尔勒香梨溯源系统 - 首页</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+    />
+
+    <style>
+      /* Google Font Link */
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 78px;
+        background: green;
+        padding: 6px 14px;
+        z-index: 99;
+        transition: all 0.5s ease;
+      }
+      .sidebar.open {
+        width: 250px;
+      }
+      .sidebar .logo-details {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+      .sidebar .logo-details .icon {
+        opacity: 0;
+        transition: all 0.5s ease;
+      }
+      .sidebar .logo-details .logo_name {
+        color: #fff;
+        font-size: 20px;
+        font-weight: 600;
+        opacity: 0;
+        transition: all 0.5s ease;
+      }
+      .sidebar.open .logo-details .icon,
+      .sidebar.open .logo-details .logo_name {
+        opacity: 1;
+      }
+      .sidebar .logo-details #btn {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        font-size: 22px;
+        transition: all 0.4s ease;
+        font-size: 23px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.5s ease;
+      }
+      .sidebar.open .logo-details #btn {
+        text-align: right;
+      }
+      .sidebar i {
+        color: #fff;
+        height: 60px;
+        min-width: 50px;
+        font-size: 28px;
+        text-align: center;
+        line-height: 60px;
+      }
+      .sidebar .nav-list {
+        margin-top: 20px;
+        height: calc(100% - 120px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 5px;
+      }
+      
+      .sidebar .nav-list::-webkit-scrollbar {
+        width: 5px;
+      }
+      
+      .sidebar .nav-list::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      
+      .sidebar .nav-list::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+      }
+      
+      .sidebar .nav-list::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
+      
+      .menu-group {
+        margin-bottom: 10px;
+      }
+      
+      .menu-header {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        cursor: pointer;
+        color: #fff;
+        font-weight: 500;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+      
+      .menu-header:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      
+      .menu-header i {
+        margin-right: 10px;
+        font-size: 18px;
+      }
+      
+      .menu-header .arrow {
+        margin-left: auto;
+        transition: transform 0.3s ease;
+      }
+      
+      .menu-header.collapsed .arrow {
+        transform: rotate(-90deg);
+      }
+      
+      .submenu {
+        max-height: 500px;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      
+      .submenu.collapsed {
+        max-height: 0;
+      }
+      
+      .submenu li {
+        margin: 5px 0;
+        padding-left: 20px;
+      }
+      
+      .submenu li a {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      
+      .submenu li a:hover {
+        background: #fff;
+      }
+      
+      /* 侧边栏折叠状态下的样式优化 */
+      .sidebar:not(.open) .menu-header {
+        justify-content: center;
+        padding: 10px 5px;
+      }
+      
+      .sidebar:not(.open) .menu-header i:not(.arrow) {
+        margin-right: 0;
+      }
+      
+      .sidebar:not(.open) .menu-header .links_name,
+      .sidebar:not(.open) .menu-header .arrow {
+        display: none;
+      }
+      
+      .sidebar:not(.open) .submenu {
+        display: none;
+      }
+      
+      .sidebar:not(.open) .menu-group {
+        margin-bottom: 5px;
+      }
+      
+      /* 移动端优化 */
+      @media (max-width: 768px) {
+        .sidebar .nav-list {
+          height: calc(100% - 100px);
+        }
+        
+        .menu-header {
+          padding: 8px 12px;
+          font-size: 14px;
+        }
+        
+        .submenu li {
+          padding-left: 15px;
+        }
+        
+        .submenu li a {
+          padding: 8px 10px;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .sidebar.open .nav-list {
+          height: calc(100% - 120px);
+        }
+        
+        .menu-header {
+          padding: 6px 10px;
+          font-size: 13px;
+        }
+        
+        .submenu li {
+          padding-left: 10px;
+          margin: 3px 0;
+        }
+        
+        .submenu li a {
+          padding: 6px 8px;
+        }
+        
+        .sidebar:not(.open) .menu-header {
+          padding: 8px 3px;
+        }
+      }
+      .sidebar li {
+        position: relative;
+        margin: 8px 0;
+        list-style: none;
+      }
+      .sidebar li .tooltip {
+        position: absolute;
+        top: -20px;
+        left: calc(100% + 15px);
+        z-index: 3;
+        background: #fff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 15px;
+        font-weight: 400;
+        opacity: 0;
+        white-space: nowrap;
+        pointer-events: none;
+        transition: 0s;
+      }
+      .sidebar li:hover .tooltip {
+        opacity: 1;
+        pointer-events: auto;
+        transition: all 0.4s ease;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .sidebar.open li .tooltip {
+        display: none;
+      }
+      .sidebar input {
+        font-size: 15px;
+        color: #fff;
+        font-weight: 400;
+        outline: none;
+        height: 50px;
+        width: 100%;
+        width: 50px;
+        border: none;
+        border-radius: 12px;
+        transition: all 0.5s ease;
+        background: #1d1b31;
+      }
+      .sidebar.open input {
+        padding: 0 20px 0 50px;
+        width: 100%;
+      }
+      .sidebar .bx-search {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        font-size: 22px;
+        background: #1d1b31;
+        color: #fff;
+      }
+      .sidebar.open .bx-search:hover {
+        background: #1d1b31;
+        color: #fff;
+      }
+      .sidebar .bx-search:hover {
+        background: #fff;
+        color: #11101d;
+      }
+      .sidebar li a {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        border-radius: 12px;
+        align-items: center;
+        text-decoration: none;
+        transition: all 0.4s ease;
+        background: #11101d;
+      }
+      .sidebar li a:hover {
+        background: #fff;
+      }
+      .sidebar li a .links_name {
+        color: #fff;
+        font-size: 15px;
+        font-weight: 400;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.4s;
+      }
+      .sidebar.open li a .links_name {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .sidebar li a:hover .links_name,
+      .sidebar li a:hover i {
+        transition: all 0.5s ease;
+        color: green;
+      }
+      .sidebar li i {
+        height: 50px;
+        line-height: 50px;
+        font-size: 18px;
+        border-radius: 12px;
+      }
+      .sidebar li.profile {
+        position: fixed;
+        height: 60px;
+        width: 78px;
+        left: 0;
+        bottom: -8px;
+        padding: 10px 14px;
+        background: #1d1b31;
+        transition: all 0.5s ease;
+        overflow: hidden;
+      }
+      .sidebar.open li.profile {
+        width: 250px;
+      }
+      .sidebar li .profile-details {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+      }
+      .sidebar li img {
+        height: 45px;
+        width: 45px;
+        object-fit: cover;
+        border-radius: 6px;
+        margin-right: 10px;
+      }
+      .sidebar li.profile .name,
+      .sidebar li.profile .job {
+        font-size: 15px;
+        font-weight: 400;
+        color: #fff;
+        white-space: nowrap;
+      }
+      .sidebar li.profile .job {
+        font-size: 12px;
+      }
+      .sidebar .profile #log_out {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        background: #1d1b31;
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+        border-radius: 0px;
+        transition: all 0.5s ease;
+      }
+      .sidebar.open .profile #log_out {
+        width: 50px;
+        background: none;
+      }
+      .home-section {
+        position: relative;
+        background: bisque;
+        min-height: 100vh;
+        top: 0;
+        left: 78px;
+        width: calc(100% - 78px);
+        transition: all 0.5s ease;
+        z-index: 2;
+      }
+      .sidebar.open ~ .home-section {
+        left: 250px;
+        width: calc(100% - 250px);
+      }
+
+      @media (max-width: 420px) {
+        .sidebar li .tooltip {
+          display: none;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .home-section {
+          left: 78px;
+          width: calc(100% - 78px);
+        }
+        
+        .sidebar.open ~ .home-section {
+          left: 250px;
+          width: calc(100% - 250px);
+        }
+        
+        .card-container {
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .card {
+          width: 90%;
+          margin: 10px 0;
+        }
+        
+        .text {
+          padding: 15px;
+        }
+        
+        .text h1 {
+          font-size: 20px;
+        }
+        
+        .text p {
+          font-size: 14px;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .home-section {
+          left: 0;
+          width: 100%;
+          padding: 10px;
+        }
+        
+        .sidebar {
+          display: none;
+        }
+        
+        .sidebar.open {
+          display: block;
+          z-index: 1000;
+        }
+        
+        .card {
+          width: 100%;
+          margin: 8px 0;
+          padding: 12px;
+        }
+        
+        .text {
+          padding: 10px;
+          border-radius: 0;
+        }
+        
+        .text h1 {
+          font-size: 18px;
+        }
+        
+        .footer {
+          font-size: 12px;
+          padding: 8px;
+        }
+      }
+
+      .home-section .text {
+        text-align: center;
+        padding: 20px;
+        background-color: green;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: white;
+      }
+
+      .footer {
+        background-color: #2c3e50;
+        color: #ffffff;
+        text-align: center;
+        padding: 10px;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+      }
+
+
+
+
+
+
+
+      /* Style for the card container */
+      .card-container {
+        display: flex;
+        flex-wrap: wrap; /* Allow cards to wrap to the next line */
+        justify-content: center;
+      }
+  
+      /* Style for the card */
+      .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: 0.3s;
+        width: 300px;
+        margin: 16px;
+        padding: 16px;
+        border-radius: 8px;
+        background-color: #fff;
+        text-align: center;
+      }
+  
+      /* Style for the card title */
+      .card h2 {
+        color: #4CAF50; /* Green color for a farm-related theme */
+      }
+  
+      /* Style for the card content */
+      .card p {
+        color: #666;
+      }
+  
+      /* Style for the card links */
+      .card a {
+        display: block;
+        margin-top: 12px;
+        padding: 8px 12px;
+        background-color: #4CAF50;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+  
+      /* Hover effect for the card links */
+      .card a:hover {
+        background-color: #45a049;
+      }
+  
+      /* Hover effect for the card */
+      .card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+
+
+
+
+    </style>
+  </head>
+  <body>
+    <!-- partial:index.partial.html -->
+    <div class="sidebar">
+      <div class="logo-details">
+        <i class="bx bxl-c-plus-plus icon"></i>
+        <div class="logo_name">库尔勒香梨溯源系统</div>
+        <i class="bx bx-menu" id="btn"></i>
+      </div>
+      <ul class="nav-list">
+        <!-- 系统概览 -->
+        <li>
+          <a href="#">
+            <i class="bx bx-grid-alt"></i>
+            <span class="links_name">系统概览</span>
+          </a>
+          <span class="tooltip">系统概览</span>
+        </li>
+        
+        <!-- 生产管理分组 -->
+        <div class="menu-group">
+          <div class="menu-header" onclick="handleMenuClick('production-menu')">
+            <i class="bx bx-leaf"></i>
+            <span class="links_name">生产管理</span>
+            <i class="bx bx-chevron-down arrow"></i>
+          </div>
+          <ul id="production-menu" class="submenu">
+            <li>
+              <a href="{% url 'homepage:show-employees' %}">
+                <i class="bx bx-user"></i>
+                <span class="links_name">人员管理</span>
+              </a>
+              <span class="tooltip">人员管理</span>
+            </li>
+            <li>
+              <a href="{% url 'homepage:show-crops' %}">
+                <i class="bx bxs-leaf"></i>
+                <span class="links_name">种植档案</span>
+              </a>
+              <span class="tooltip">种植档案</span>
+            </li>
+            <li>
+              <a href="{% url 'homepage:show-livestock' %}">
+                <i class="bx bxs-tree"></i>
+                <span class="links_name">采摘批次</span>
+              </a>
+              <span class="tooltip">采摘批次</span>
+            </li>
+            <li>
+              <a href="{% url 'homepage:show-machinery' %}">
+                <i class="bx bxs-car-mechanic"></i>
+                <span class="links_name">农机设备</span>
+              </a>
+              <span class="tooltip">农机设备</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- 溯源管理分组 -->
+        <div class="menu-group">
+          <div class="menu-header" onclick="handleMenuClick('traceability-menu')">
+            <i class="bx bx-qr-scan"></i>
+            <span class="links_name">溯源管理</span>
+            <i class="bx bx-chevron-down arrow"></i>
+          </div>
+          <ul id="traceability-menu" class="submenu">
+            <li>
+              <a href="{% url 'homepage:qrcode-scanner' %}">
+                <i class="bx bx-qr-scan"></i>
+                <span class="links_name">二维码扫描</span>
+              </a>
+              <span class="tooltip">二维码扫描</span>
+            </li>
+            <li>
+              <a href="{% url 'homepage:qrcode-list' %}">
+                <i class="bx bx-qr"></i>
+                <span class="links_name">二维码管理</span>
+              </a>
+              <span class="tooltip">二维码管理</span>
+            </li>
+            <li>
+              <a href="{% url 'homepage:show-storage-list' %}">
+                <i class="bx bx-package"></i>
+                <span class="links_name">仓储管理</span>
+              </a>
+              <span class="tooltip">仓储管理</span>
+            </li>
+            <li>
+              <a href="{% url 'homepage:show-logistics-list' %}">
+                <i class="bx bx-map"></i>
+                <span class="links_name">物流追踪</span>
+              </a>
+              <span class="tooltip">物流追踪</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- 系统管理分组 -->
+        <div class="menu-group">
+          <div class="menu-header" onclick="handleMenuClick('system-menu')">
+            <i class="bx bx-cog"></i>
+            <span class="links_name">系统管理</span>
+            <i class="bx bx-chevron-down arrow"></i>
+          </div>
+          <ul id="system-menu" class="submenu">
+            <li>
+              <a href="{% url 'homepage:help' %}">
+                <i class="bx bx-help-circle"></i>
+                <span class="links_name">帮助中心</span>
+              </a>
+              <span class="tooltip">帮助中心</span>
+            </li>
+            <li>
+              <a href="{% url 'homepage:settings' %}">
+                <i class="bx bx-cog"></i>
+                <span class="links_name">系统设置</span>
+              </a>
+              <span class="tooltip">系统设置</span>
+            </li>
+          </ul>
+        </div>
+      </ul>
+    </div>
+    <section class="home-section">
+      <div class="text">
+        <div class="welcome-message">
+          <h1 id="greeting">
+            晚上好 {{user.username}}，让我们开始监控您的生产活动！
+          </h1>
+        </div>
+        <script>
+          // JavaScript to dynamically change the greeting based on the time of day
+          var today = new Date();
+          var hour = today.getHours();
+
+          var greeting = document.getElementById("greeting");
+
+          if (hour >= 5 && hour < 12) {
+            greeting.innerHTML =
+              "早上好 {{user.username}}，让我们开始监控您的生产活动！";
+          } else if (hour >= 12 && hour < 18) {
+            greeting.innerHTML =
+              "下午好 {{user.username}}，让我们开始监控您的生产活动！";
+          } else {
+            greeting.innerHTML =
+              "晚上好 {{user.username}}，让我们开始监控您的生产活动！";
+          }
+        </script>
+
+        <p>
+          欢迎 {{user.username}} 来到您的控制面板。在这里，您可以分析和监控香梨生产的各个环节
+        </p>
+      </div>
+
+
+
+  <!-- Cards container -->
+  <div class="card-container">
+
+    <!-- Card 1 -->
+    <div class="card">
+      <h2>人员信息详情</h2>
+      <p>在此记录和管理果园工作人员信息</p>
+      <a href="{% url 'homepage:show-employees' %}">查看详情</a>
+    </div>
+    <!-- Card 2 -->
+    <div class="card">
+      <h2>采摘批次管理</h2>
+      <p>追踪并管理不同地块的采摘批次</p>
+      <a href="{% url 'homepage:show-livestock' %}">查看采摘报告</a>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+      <h2>种植生长报告</h2>
+      <p>监控香梨种植的每个操作和详细信息</p>
+      <a href="{% url 'homepage:show-crops' %}">查看种植报告</a>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="card">
+      <h2>设备作业报告</h2>
+      <p>管理农场机械设备和装备的重要信息</p>
+      <a href="{% url 'homepage:show-machinery' %}">查看设备报告</a>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="card">
+      <h2>产量分析</h2>
+      <p>跟踪您的产量趋势</p>
+      <a href="{% url 'homepage:select-yearmonth' %}">产量分析</a>
+
+      
+    </div>
+
+        <!-- Card 6 -->
+        <div class="card">
+          <h2>香梨产量与质量分析</h2>
+          <p>监控果园各批次采摘产出趋势</p>
+          <a href="{% url 'homepage:select-yearandmonth' %}">产量统计分析</a>
+        </div>
+
+        <!-- Card 7: 二维码扫描 -->
+        <div class="card">
+          <h2>二维码扫描</h2>
+          <p>扫描产品二维码，查看完整溯源信息</p>
+          <a href="{% url 'homepage:qrcode-scanner' %}">开始扫描</a>
+        </div>
+
+        <!-- Card 8: 二维码管理 -->
+        <div class="card">
+          <h2>二维码管理</h2>
+          <p>管理所有生成的二维码，查看扫描记录和状态</p>
+          <a href="{% url 'homepage:qrcode-list' %}">管理二维码</a>
+        </div>
+
+        <!-- Card 9: 仓储管理 -->
+        <div class="card">
+          <h2>仓储管理</h2>
+          <p>管理仓库库存，监控存储环境和库存状态</p>
+          <a href="{% url 'homepage:show-storage-list' %}">查看仓储</a>
+        </div>
+
+        <!-- Card 10: 物流追踪 -->
+        <div class="card">
+          <h2>物流追踪</h2>
+          <p>追踪采摘批次从果园到消费者的完整物流过程</p>
+          <a href="{% url 'homepage:show-logistics-list' %}">查看物流</a>
+        </div>
+
+  </div>
+
+
+
+    </section>
+    <!-- partial -->
+    <script>
+      let sidebar = document.querySelector(".sidebar");
+      let closeBtn = document.querySelector("#btn");
+      let searchBtn = document.querySelector(".bx-search");
+      closeBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+        menuBtnChange(); //calling the function(optional)
+      });
+      searchBtn.addEventListener("click", () => {
+        // Sidebar open when you click on the search iocn
+        sidebar.classList.toggle("open");
+        menuBtnChange(); //calling the function(optional)
+      });
+      // following are the code to change sidebar button(optional)
+      function menuBtnChange() {
+        if (sidebar.classList.contains("open")) {
+          closeBtn.classList.replace("bx-menu", "bx-menu-alt-right"); //replacing the iocns class
+        } else {
+          closeBtn.classList.replace("bx-menu-alt-right", "bx-menu"); //replacing the iocns class
+        }
+      }
+      
+      // 折叠菜单功能
+      function toggleMenu(menuId) {
+        const menu = document.getElementById(menuId);
+        const header = menu.previousElementSibling;
+        
+        menu.classList.toggle('collapsed');
+        header.classList.toggle('collapsed');
+      }
+      
+      // 处理菜单点击（支持侧边栏未展开状态）
+      function handleMenuClick(menuId) {
+        const sidebar = document.querySelector('.sidebar');
+        const isSidebarOpen = sidebar.classList.contains('open');
+        
+        if (!isSidebarOpen) {
+          // 如果侧边栏未展开，先展开侧边栏
+          sidebar.classList.add('open');
+          menuBtnChange();
+          
+          // 等待侧边栏展开动画完成后再展开菜单
+          setTimeout(() => {
+            const menu = document.getElementById(menuId);
+            const header = menu.previousElementSibling;
+            
+            // 确保菜单是展开状态
+            menu.classList.remove('collapsed');
+            header.classList.remove('collapsed');
+          }, 300); // 等待侧边栏展开动画完成
+        } else {
+          // 如果侧边栏已展开，直接切换菜单
+          toggleMenu(menuId);
+        }
+      }
+      
+      // 页面加载时默认展开第一个菜单
+      document.addEventListener('DOMContentLoaded', function() {
+        // 默认展开生产管理菜单
+        const productionMenu = document.getElementById('production-menu');
+        const productionHeader = productionMenu.previousElementSibling;
+        productionMenu.classList.remove('collapsed');
+        productionHeader.classList.remove('collapsed');
+      });
+    </script>
+
+    <div class="footer">
+      <p>&copy; 2026 库尔勒香梨生产溯源管理系统 版权所有。</p>
+    </div>
+  </body>
+</html>

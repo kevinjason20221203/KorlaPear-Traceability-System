@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维码生成结果 - 库尔勒香梨溯源系统</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 15px;
+        }
+        .header h1 {
+            color: #333;
+            margin: 0;
+        }
+        .message {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .qrcode-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .qrcode-image {
+            max-width: 300px;
+            margin: 0 auto 20px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .qrcode-image img {
+            width: 100%;
+            height: auto;
+        }
+        .info-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .info-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 3px solid #4CAF50;
+        }
+        .info-item strong {
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .info-item span {
+            color: #666;
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+        .btn-download {
+            background-color: #2196F3;
+            color: white;
+        }
+        .btn-download:hover {
+            background-color: #0b7dda;
+            transform: translateY(-2px);
+        }
+        .instructions {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+        .instructions h4 {
+            margin-top: 0;
+            color: #856404;
+        }
+        .instructions ul {
+            margin-bottom: 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍐 库尔勒香梨二维码生成结果</h1>
+        </div>
+        
+        {% if message %}
+        <div class="message">
+            <strong>提示：</strong> {{ message }}
+        </div>
+        {% endif %}
+        
+        <div class="qrcode-section">
+            <h2>批次二维码</h2>
+            <div class="qrcode-image">
+                {% if qrcode.qr_code %}
+                    <img src="{{ qrcode.qr_code.url }}" alt="批次二维码">
+                {% else %}
+                    <p style="color: #dc3545; padding: 40px;">二维码图片生成中...</p>
+                {% endif %}
+            </div>
+            <p><strong>序列号：</strong> {{ qrcode.serial_number }}</p>
+            <p><strong>状态：</strong> 
+                {% if qrcode.status == 'generated' %}已生成
+                {% elif qrcode.status == 'printed' %}已打印
+                {% elif qrcode.status == 'attached' %}已贴标
+                {% elif qrcode.status == 'scanned' %}已扫描
+                {% else %}{{ qrcode.status }}{% endif %}
+            </p>
+        </div>
+        
+        <div class="info-section">
+            <h3>关联批次信息</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>批次编号</strong>
+                    <span>{{ livestock.Tag_number }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>产品规格</strong>
+                    <span>{{ livestock.Breed }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>存储时长</strong>
+                    <span>{{ livestock.Age }} 天</span>
+                </div>
+                <div class="info-item">
+                    <strong>物流类型</strong>
+                    <span>{{ livestock.Animal_type }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>二维码创建时间</strong>
+                    <span>{{ qrcode.created_at|date:"Y-m-d H:i:s" }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>最后扫描时间</strong>
+                    <span>
+                        {% if qrcode.last_scanned %}
+                            {{ qrcode.last_scanned|date:"Y-m-d H:i:s" }}
+                        {% else %}
+                            尚未扫描
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h4>使用说明：</h4>
+            <ul>
+                <li>此二维码已关联到批次编号：<strong>{{ livestock.Tag_number }}</strong></li>
+                <li>扫描二维码可查看完整的生产溯源信息</li>
+                <li>建议将二维码打印并粘贴在包装箱上</li>
+                <li>消费者可通过手机扫描二维码查询产品信息</li>
+                <li>每次扫描都会记录在系统中，便于追踪</li>
+            </ul>
+        </div>
+        
+        <div class="actions">
+            {% if qrcode.qr_code %}
+            <a href="{{ qrcode.qr_code.url }}" download class="btn btn-download">下载二维码图片</a>
+            {% endif %}
+            <a href="{% url 'homepage:qrcode-management' Tag_number=livestock.Tag_number %}" class="btn btn-primary">管理二维码</a>
+            <a href="{% url 'homepage:show-livestock' %}" class="btn btn-secondary">返回批次列表</a>
+            <a href="{% url 'homepage:qrcode-scanner' %}" class="btn btn-primary">前往扫码页面</a>
+        </div>
+    </div>
+</body>
+</html>

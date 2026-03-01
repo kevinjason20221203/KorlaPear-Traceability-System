@@ -1,0 +1,150 @@
+{% extends 'homepage/base.html' %}
+{% block content %}
+<head>
+  <title>香梨种植地块列表</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    color: #333;
+    text-align: center;
+    background-color: antiquewhite;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  .update-link,
+  .delete-link {
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #fff;
+    border-radius: 3px;
+    margin-right: 5px;
+  }
+
+  .update-link {
+    background-color: #3498db;
+  }
+
+  .delete-link {
+    background-color: #e74c3c;
+  }
+
+  .add-button {
+    display: inline-block;
+    padding: 10px;
+    background-color: rgb(127, 127, 150);
+    color: white;
+    text-decoration: none;
+    border-radius: 3px;
+    margin-top: 20px;
+    align-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .expenses-link {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+    text-align: center;
+    text-decoration: none;
+    border: 2px solid #3498db;
+    color: #3498db;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .expenses-link:hover {
+    background-color: #3498db;
+    color: #fff;
+  }
+      
+</style>
+</head>
+<body>
+  <h1>香梨种植地块列表</h1>
+  {% if crops %}
+    <table class="crop-table">
+      <tr>
+        <th>地块ID</th>
+        <th>地块名称</th>
+        <th>地块描述</th>
+        <th>品种</th>
+        <th>品种类型</th>
+        <th>种植日期</th>
+        <th>是否已采摘</th>
+        <th>采摘日期</th>
+        <th>费用监控</th>
+        <th>销售监控</th>
+        <th>操作监控</th>
+        <th>操作</th>
+      </tr>
+      {% for crop in crops %}
+        <tr>
+          <td>{{ crop.Cid }}</td>
+          <td>{{ crop.Field_name }}</td>
+          <td>{{ crop.Field_description }}</td>
+          <td>{{ crop.Crop_name }}</td>
+          <td>{{ crop.Variety }}</td>
+          <td>{{ crop.Planting_date }}</td>
+          <td>{{ crop.Is_harvested }}</td>
+          <td>{{ crop.Harvesting_date }}</td>
+
+          <td>
+             <a href="{% url 'homepage:show-cropexpenses' Cid=crop.Cid %}" class=expenses-link>费用</a></td>
+             <td>
+             <a href="{% url 'homepage:show-cropsales' Cid=crop.Cid %}" class=expenses-link>销售</a>
+          </td>
+
+          <td>
+            <a href="{% url 'homepage:show-cropoperations' Cid=crop.Cid %}" class=expenses-link>操作</a>
+         </td>
+          <td>
+          
+            <a href="{% url 'homepage:update-crops' Cid=crop.Cid %}" class="update-link">编辑</a>
+            <a href="{% url 'homepage:delete-crops' Cid=crop.Cid %}" class=delete-link>删除</a>
+          </td>
+          </td>
+         
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p class="no-crops">未找到种植地块。</p>
+  {% endif %}
+  
+  <a href="{%url 'homepage:add-crops' %}" class="add-button">添加新地块</a>
+
+
+</body>
+
+
+{%endblock%}

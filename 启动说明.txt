@@ -1,0 +1,131 @@
+库尔勒香梨生产溯源管理系统 - 启动说明
+========================================
+
+📋 系统信息
+-----------
+- 项目名称：库尔勒香梨生产溯源管理系统
+- 技术栈：Django 5.0 + SQLite + HTML/CSS/JavaScript
+- 访问地址：http://127.0.0.1:8080
+- 管理员账号：admin / 123456
+
+🚀 启动方式（3种选择）
+--------------------
+
+### 方式1：智能启动脚本（推荐）
+双击运行：`start.bat`
+- ✅ 自动检查环境
+- ✅ 自动修复问题
+- ✅ 自动清理端口占用
+- ✅ 显示详细启动信息
+
+### 方式2：快速启动脚本
+双击运行：`quick_start.bat`
+- ✅ 最简启动方式
+- ✅ 适合环境已配置的情况
+- ✅ 快速启动服务器
+
+### 方式3：手动启动
+在项目根目录打开命令行，执行：
+```bash
+# 1. 进入项目目录
+cd "毕业设计项目-参考资料/Farm_Management_System-main"
+
+# 2. 激活虚拟环境
+venv\Scripts\activate
+
+# 3. 启动服务器
+python manage.py runserver 8080
+```
+
+🌐 访问系统
+----------
+1. 启动成功后，打开浏览器
+2. 访问：http://127.0.0.1:8080
+3. 使用管理员账号登录：
+   - 用户名：admin
+   - 密码：123456
+
+📊 系统功能模块
+---------------
+启动后可以访问以下功能：
+
+### 1. 员工管理
+- 路径：http://127.0.0.1:8080/show_employees/
+- 数据：6名员工（张伟、阿依古丽、王强等）
+
+### 2. 种植档案管理
+- 路径：http://127.0.0.1:8080/show_crops/
+- 数据：16个种植地块（阿瓦提乡1号地块、铁门关2号示范林等）
+
+### 3. 采摘批次管理
+- 路径：http://127.0.0.1:8080/show_livestock/
+- 数据：9个采摘批次（KRL-20260201-001等）
+
+### 4. 农机设备管理
+- 路径：http://127.0.0.1:8080/show_machinery/
+- 数据：7台农机设备（约翰迪尔收割机、东方红拖拉机等）
+
+### 5. 产量分析
+- 路径：http://127.0.0.1:8080/select_yearmonth/
+- 功能：查看月度产量统计图表
+
+🛠️ 故障排除
+-----------
+如果启动失败，请尝试以下步骤：
+
+### 1. 端口占用问题
+```bash
+# 检查8080端口占用
+netstat -ano | findstr :8080
+
+# 清理占用进程
+taskkill /f /im python.exe 2>nul
+```
+
+### 2. 数据库问题
+```bash
+# 进入项目目录并激活虚拟环境后
+python manage.py migrate
+python manage.py check
+```
+
+### 3. 依赖问题
+```bash
+# 重新安装依赖
+pip install django==5.0 pillow qrcode qrcode[pil] -i https://pypi.tuna.tsinghua.edu.cn/simple
+```
+
+✅ 启动成功标志
+-------------
+看到以下输出表示启动成功：
+```
+Performing system checks...
+System check identified no issues (0 silenced).
+Starting development server at http://127.0.0.1:8080/
+Quit the server with CTRL-BREAK.
+```
+
+📁 项目文件说明
+---------------
+- `start.bat` - 智能启动脚本（推荐）
+- `quick_start.bat` - 快速启动脚本
+- `manage.py` - Django管理脚本
+- `db.sqlite3` - 数据库文件（包含演示数据）
+- `requirements.txt` - Python依赖列表
+- `seed_data.py` - 数据生成脚本
+
+⚠️ 注意事项
+----------
+1. 首次运行可能需要安装Python依赖
+2. 确保8080端口未被其他程序占用
+3. 虚拟环境已包含所有必要依赖
+4. 数据库已包含完整的演示数据
+
+📞 技术支持
+----------
+如有问题，请检查：
+1. Python是否已安装（需要Python 3.8+）
+2. 是否在项目根目录运行脚本
+3. 虚拟环境是否完整
+
+祝您使用愉快！🍐
