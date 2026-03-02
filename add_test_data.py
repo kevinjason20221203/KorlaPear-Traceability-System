@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 import random
 
 # 设置Django环境
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'FarmManagementSystem.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'KorlaPearTraceabilitySystem.settings')
 django.setup()
 
 from django.contrib.auth.models import User

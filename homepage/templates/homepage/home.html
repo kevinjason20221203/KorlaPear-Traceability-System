@@ -738,44 +738,35 @@
       <a href="{% url 'homepage:show-machinery' %}">查看设备报告</a>
     </div>
 
-    <!-- Card 5 -->
-    <div class="card">
-      <h2>产量分析</h2>
-      <p>跟踪您的产量趋势</p>
-      <a href="{% url 'homepage:select-yearmonth' %}">产量分析</a>
-
-      
-    </div>
-
-        <!-- Card 6 -->
+        <!-- Card 5: 产量与质量分析 -->
         <div class="card">
-          <h2>香梨产量与质量分析</h2>
-          <p>监控果园各批次采摘产出趋势</p>
-          <a href="{% url 'homepage:select-yearandmonth' %}">产量统计分析</a>
+          <h2>产量与质量分析</h2>
+          <p>跟踪香梨产量趋势，分析各批次质量数据</p>
+          <a href="{% url 'homepage:select-yearmonth' %}">查看分析报告</a>
         </div>
 
-        <!-- Card 7: 二维码扫描 -->
+        <!-- Card 6: 二维码扫描 -->
         <div class="card">
           <h2>二维码扫描</h2>
           <p>扫描产品二维码，查看完整溯源信息</p>
           <a href="{% url 'homepage:qrcode-scanner' %}">开始扫描</a>
         </div>
 
-        <!-- Card 8: 二维码管理 -->
+        <!-- Card 7: 二维码管理 -->
         <div class="card">
           <h2>二维码管理</h2>
           <p>管理所有生成的二维码，查看扫描记录和状态</p>
           <a href="{% url 'homepage:qrcode-list' %}">管理二维码</a>
         </div>
 
-        <!-- Card 9: 仓储管理 -->
+        <!-- Card 8: 仓储管理 -->
         <div class="card">
           <h2>仓储管理</h2>
           <p>管理仓库库存，监控存储环境和库存状态</p>
           <a href="{% url 'homepage:show-storage-list' %}">查看仓储</a>
         </div>
 
-        <!-- Card 10: 物流追踪 -->
+        <!-- Card 9: 物流追踪 -->
         <div class="card">
           <h2>物流追踪</h2>
           <p>追踪采摘批次从果园到消费者的完整物流过程</p>

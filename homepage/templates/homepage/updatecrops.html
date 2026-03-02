@@ -1,7 +1,7 @@
 {%extends 'homepage/base.html' %}
 {%block content%}
 <head>
-    <title>update crop</title>
+    <title>更新种植档案</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -59,36 +59,36 @@
     </style>
     </head>
     <body>
-      <h1>Update Crop</h1>
+      <h1>更新种植档案</h1>
       <form method="post">
         {% csrf_token %}
     
-        <label for="id_Cid">Crop ID:</label>
+        <label for="id_Cid">种植编号:</label>
         <input type="text" name="Cid" id="id_Cid" value="{{ crops.Cid }}" required>
     
-        <label for="id_Field_name">Field Name:</label>
+        <label for="id_Field_name">地块名称:</label>
         <input type="text" name="Field_name" id="id_Field_name" value="{{ crops.Field_name }}" required>
     
-        <label for="id_Field_description">Field Description:</label>
+        <label for="id_Field_description">地块描述:</label>
         <textarea name="Field_description" id="id_Field_description" required> value"{{ crops.Field_description }}"</textarea>
 
-        <label for="id_Crop_name">Crop Name:</label>
+        <label for="id_Crop_name">作物名称:</label>
         <input type="text" name="Crop_name" id="id_Crop_name" value="{{ crops.Crop_name }}" required>
 
-        <label for="id_Variety">Variety:</label>
+        <label for="id_Variety">品种:</label>
         <input type="text" name="Variety" id="id_Variety" value="{{ crops.Variety }}" required>
     
-        <label for="id_planting_date">Planting Date:</label>
+        <label for="id_planting_date">种植日期:</label>
         <input type="date" name="Planting_date" id="id_planting_date" value="{{ crops.Planting_date|date:'Y-m-d' }}" required>
 
-        <label for="id_Is_harvested">Is Harvested:</label>
+        <label for="id_Is_harvested">是否已收获:</label>
         <input type="checkbox" name="Is_harvested" id="id_Is_harvested" {% if crops.Is_harvested %}checked{% endif %}>
 
-        <label for="id_Harvesting_date">Harvesting Date:</label>
+        <label for="id_Harvesting_date">收获日期:</label>
         <input type="date" name="Harvesting_date" id="id_Harvesting_date" value="{{ crops.Harvesting_date|date:'Y-m-d' }}" >
     
     
-        <input type="submit" value="Update">
+        <input type="submit" value="更新">
       </form>
     </body>
     {%endblock%}

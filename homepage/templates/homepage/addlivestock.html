@@ -2,7 +2,7 @@
 
 {% block content %}
     <head>
-        <title>add Livestock</title>
+        <title>添加采摘批次</title>
         {%load static%}  
         <style>
 
@@ -65,10 +65,10 @@
     <body>
         
         <form method="POST" action={%url 'homepage:add-livestock'%}>
-            <h2>Add Livestock</h2>
+            <h2>添加采摘批次</h2>
             {%csrf_token%}
             {{form.as_p}}
-            <input type="submit" value="add">
+            <input type="submit" value="添加">
         </form>
     </body>
     {%endblock%}

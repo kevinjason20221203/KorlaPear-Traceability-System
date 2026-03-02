@@ -65,19 +65,19 @@
   </style>
 </head>
 <body>
-  <h1>Crop Expenses Details</h1>
+  <h1>种植费用详情</h1>
   <table>
     <thead>
       <tr>
-        <th>Expense Date</th>
-        <th>Expense Type</th>
-        <th>Expense Description</th>
-        <th>Budge Amount</th>
-        <th>Expense Amount</th>
-        <th>Supplier Name</th>
-        <th>Payment Method</th>
-        <th>Receipt Number</th>
-        <th>Actions</th>
+        <th>费用日期</th>
+        <th>费用类型</th>
+        <th>费用描述</th>
+        <th>预算金额</th>
+        <th>实际金额</th>
+        <th>供应商名称</th>
+        <th>支付方式</th>
+        <th>收据编号</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
@@ -96,12 +96,12 @@
           <a
             href="{%url 'homepage:update-cropexpenses' Cid=crops.Cid Expense_date=expense.Expense_date|date:'Y-m-d' %}"
             class="update-link"
-            >Update</a
+            >更新</a
           >
           <a
             href="{%url 'homepage:delete-cropexpenses' Cid=crops.Cid Expense_date=expense.Expense_date|date:'Y-m-d' %}"
             class="delete-link"
-            >Delete</a
+            >删除</a
           >
         </td>
       </tr>
@@ -112,7 +112,7 @@
   <a
     href="{% url 'homepage:add-cropexpenses' Cid=crops.Cid %}"
     class="add-button"
-    >Add an Expense</a
+    >添加费用</a
   >
 </body>
 {%endblock%}

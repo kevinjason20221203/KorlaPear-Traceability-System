@@ -1,7 +1,7 @@
 {%extends 'homepage/base.html'%}
 {%block content%}
 <head>
-    <title>update Employee</title>
+    <title>更新员工信息</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -59,34 +59,34 @@
     </style>
     </head>
     <body>
-      <h1>Update Employee</h1>
+      <h1>更新员工信息</h1>
       <form method="post">
         {% csrf_token %}
     
-        <label for="id_Eid">Employers ID:</label>
+        <label for="id_Eid">员工编号:</label>
         <input type="number" name="Eid" id="id_Eid" value="{{employee.Eid }}" required>
     
-        <label for="id_Name">Name:</label>
+        <label for="id_Name">姓名:</label>
         <input type="text" name="Name" id="id_Name" value="{{ employee.Name }}" required>
 
-        <label for="id_Country_code">Country code:</label>
+        <label for="id_Country_code">国家代码:</label>
         <input type="text" name="Country_code" id="id_Country_code" value="{{ employee.Country_code }}" required>
 
-        <label for="id_Phone_number">Phone number:</label>
+        <label for="id_Phone_number">电话号码:</label>
         <input type="text" name="Phone_number" id="id_Phone_number" value="{{ employee.Phone_number }}" required>
     
-        <label for="id_Position">Work Position:</label>
+        <label for="id_Position">工作岗位:</label>
         <input type="text" name="Position" id="id_Position" value="{{ employee.Position }}" required>
     
-        <label for="id_Salary">Salary Amount:</label>
+        <label for="id_Salary">工资数额:</label>
         <input type="number" name="Salary" id="id_Salary" value="{{ employee.Salary }}" required>
     
-        <label for="id_Performance">Performance:</label>
+        <label for="id_Performance">工作表现:</label>
         <input type="text" name="Performance" id="id_Performance" value="{{ employee.Performance }}"required>
     
     
     
-        <input type="submit" value="Update">
+        <input type="submit" value="更新">
       </form>
     </body>
     {%endblock%}

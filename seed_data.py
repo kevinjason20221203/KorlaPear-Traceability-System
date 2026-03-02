@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 
 # 设置Django环境
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'FarmManagementSystem.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'KorlaPearTraceabilitySystem.settings')
 django.setup()
 
 from homepage.models import Employees, Crops, Livestock, Machinery, Milk_production, Eggs_production

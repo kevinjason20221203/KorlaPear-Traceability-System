@@ -74,58 +74,151 @@
 </head>
 <body>
     <h1>{{selected_year}}年{{selected_month}}月 香梨产量分析</h1>
-    <p style="text-align: center; color: #666; margin-bottom: 20px;">纯数据统计 - 展示每日、每月的香梨采摘总量趋势图</p>
-
-
-
-    <table>
-        <thead>
-            <tr>
-
-              <th>日期</th>
-              <th>作业数量/规模</th>
-              <th>上午产出</th>
-              <th>中午产出</th>
-              <th>晚上产出</th>
-              <th>当日总计</th>
-              <th>上午消耗</th>
-              <th>晚上消耗</th>
-              <th>总消耗</th>
-              <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for record in milk_production_records %}
-            <tr>
-              <td>{{ record.Day }}</td>
-              <td>{{ record.Livestock_number }}</td>
-              <td>{{ record.Morning_production }}</td>
-              <td>{{ record.Midday_production }}</td>
-              <td>{{ record.Evening_production }}</td>
-              <td>{{ record.Total_production}}</td>
-              <td>{{ record.Morning_consumption}}</td>
-              <td>{{ record.Evening_consumption}}</td>
-              <td>{{ record.Total_consumption}}</td>
-
-                <td>
-                <a href="{% url 'homepage:update-milkproductionbymonth' selected_year=selected_year selected_month=selected_month Day=record.Day%}" class="update-link">编辑</a>
-                <a href="{% url 'homepage:delete-milkproductionbymonth' selected_year=selected_year selected_month=selected_month Day=record.Day%}"class="delete-link">删除</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <a href="{% url 'homepage:add-milkproductionbymonth' selected_year=selected_year selected_month=selected_month %}" class="add-button">添加</a>
     
-    <div>
-      <h3>每日生产趋势图</h3>
-      <img src="data:image/png;base64,{{ image_base64_production }}" alt="每日生产趋势图">
-  </div>
+    <!-- 统计摘要 -->
+    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #4CAF50;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+            <div style="text-align: center; padding: 10px;">
+                <div style="font-size: 24px; font-weight: bold; color: #4CAF50;">{{ total_records }}</div>
+                <div style="color: #666;">记录天数</div>
+            </div>
+            <div style="text-align: center; padding: 10px;">
+                <div style="font-size: 24px; font-weight: bold; color: #2196F3;">{{ total_production|floatformat:1 }}</div>
+                <div style="color: #666;">总产量(公斤)</div>
+            </div>
+            <div style="text-align: center; padding: 10px;">
+                <div style="font-size: 24px; font-weight: bold; color: #F44336;">{{ total_consumption|floatformat:1 }}</div>
+                <div style="color: #666;">总消耗(公斤)</div>
+            </div>
+            <div style="text-align: center; padding: 10px;">
+                <div style="font-size: 24px; font-weight: bold; color: #FF9800;">{{ total_production|add:total_consumption|floatformat:1 }}</div>
+                <div style="color: #666;">总量合计</div>
+            </div>
+        </div>
+    </div>
 
-  <div>
-    <h3>每日消耗趋势图</h3>
-    <img src="data:image/png;base64,{{ image_base64_consumption }}" alt="每日消耗趋势图">
-</div>
+    <!-- 数据表格 -->
+    <div style="margin-bottom: 30px;">
+        <h3 style="color: #333; border-bottom: 2px solid #4CAF50; padding-bottom: 5px;">详细数据记录</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>作业规模</th>
+                    <th>早晨产量</th>
+                    <th>中午产量</th>
+                    <th>晚上产量</th>
+                    <th>当日总计</th>
+                    <th>早晨消耗</th>
+                    <th>晚上消耗</th>
+                    <th>总消耗</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in milk_production_records %}
+                <tr>
+                    <td>{{ record.Day }}日</td>
+                    <td>{{ record.Livestock_number }}</td>
+                    <td>{{ record.Morning_production|floatformat:1 }}</td>
+                    <td>{{ record.Midday_production|floatformat:1 }}</td>
+                    <td>{{ record.Evening_production|floatformat:1 }}</td>
+                    <td style="font-weight: bold; color: #4CAF50;">{{ record.Total_production|floatformat:1 }}</td>
+                    <td>{{ record.Morning_consumption|floatformat:1 }}</td>
+                    <td>{{ record.Evening_consumption|floatformat:1 }}</td>
+                    <td style="font-weight: bold; color: #F44336;">{{ record.Total_consumption|floatformat:1 }}</td>
+                    <td>
+                        <a href="{% url 'homepage:update-milkproductionbymonth' selected_year=selected_year selected_month=selected_month Day=record.Day%}" class="update-link">编辑</a>
+                        <a href="{% url 'homepage:delete-milkproductionbymonth' selected_year=selected_year selected_month=selected_month Day=record.Day%}" class="delete-link">删除</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10" style="text-align: center; padding: 20px; color: #999;">
+                        暂无数据，请点击下方"添加数据"按钮添加{{selected_year}}年{{selected_month}}月的产量记录
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'homepage:add-milkproductionbymonth' selected_year=selected_year selected_month=selected_month %}" class="add-button">添加数据</a>
+        </div>
+    </div>
+
+    <!-- 数据可视化图表 -->
+    {% if has_data %}
+    <div style="margin-bottom: 30px;">
+        <h3 style="color: #333; border-bottom: 2px solid #4CAF50; padding-bottom: 5px;">数据可视化分析</h3>
+        
+        <!-- 图表1：每日总产量柱状图 -->
+        <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+            <h4 style="color: #4CAF50; margin-top: 0;">📊 每日总产量趋势</h4>
+            <p style="color: #666; margin-bottom: 15px;">展示{{selected_year}}年{{selected_month}}月每日香梨总产量的变化趋势</p>
+            <img src="data:image/png;base64,{{ image_base64_production }}" alt="每日总产量趋势图" style="width: 100%; max-width: 900px; display: block; margin: 0 auto;">
+        </div>
+
+        <!-- 图表2：分时段产量堆叠柱状图 -->
+        <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+            <h4 style="color: #FF9800; margin-top: 0;">⏰ 分时段产量分布</h4>
+            <p style="color: #666; margin-bottom: 15px;">展示每日早晨、中午、晚上三个时段的产量分布情况</p>
+            <img src="data:image/png;base64,{{ image_base64_timeslot }}" alt="分时段产量分布图" style="width: 100%; max-width: 900px; display: block; margin: 0 auto;">
+        </div>
+
+        <!-- 图表3：产量与消耗对比折线图 -->
+        <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+            <h4 style="color: #2196F3; margin-top: 0;">📈 产量与消耗对比趋势</h4>
+            <p style="color: #666; margin-bottom: 15px;">对比每日产量与消耗的变化趋势，绿色区域表示产量盈余，红色区域表示消耗超出</p>
+            <img src="data:image/png;base64,{{ image_base64_comparison }}" alt="产量与消耗对比图" style="width: 100%; max-width: 900px; display: block; margin: 0 auto;">
+        </div>
+
+        <!-- 图表4：月度统计摘要 -->
+        {% if image_base64_summary %}
+        <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">
+            <h4 style="color: #9C27B0; margin-top: 0;">📋 月度统计摘要</h4>
+            <p style="color: #666; margin-bottom: 15px;">{{selected_year}}年{{selected_month}}月的月度产量与消耗统计摘要</p>
+            <img src="data:image/png;base64,{{ image_base64_summary }}" alt="月度统计摘要图" style="width: 100%; max-width: 700px; display: block; margin: 0 auto;">
+        </div>
+        {% endif %}
+
+        <!-- 数据分析说明 -->
+        <div style="background-color: #e8f5e8; padding: 15px; border-radius: 8px; border-left: 4px solid #4CAF50; margin-top: 20px;">
+            <h5 style="color: #2E7D32; margin-top: 0;">📝 数据分析说明</h5>
+            <ul style="color: #555; margin-bottom: 0;">
+                <li><strong>总产量趋势</strong>：反映每日香梨采摘总量的变化，帮助识别高产日和低产日</li>
+                <li><strong>分时段分布</strong>：分析不同时段的产量贡献，优化采摘作业安排</li>
+                <li><strong>产量消耗对比</strong>：监控产量与消耗的平衡关系，确保生产效益</li>
+                <li><strong>月度统计</strong>：提供月度整体数据概览，支持生产决策</li>
+            </ul>
+        </div>
+    </div>
+    {% else %}
+    <div style="background-color: #fff3cd; padding: 20px; border-radius: 8px; border: 1px solid #ffeaa7; text-align: center; margin-bottom: 30px;">
+        <h4 style="color: #856404; margin-top: 0;">⚠️ 暂无数据可分析</h4>
+        <p style="color: #856404;">当前月份（{{selected_year}}年{{selected_month}}月）没有产量记录数据，无法生成分析图表。</p>
+        <p style="color: #856404;">请先添加数据，然后刷新页面查看分析结果。</p>
+        <a href="{% url 'homepage:add-milkproductionbymonth' selected_year=selected_year selected_month=selected_month %}" 
+           style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; margin-top: 10px;">
+            📝 立即添加数据
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- 操作按钮 -->
+    <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+        <a href="{% url 'homepage:select-yearmonth' %}" 
+           style="display: inline-block; padding: 10px 20px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px; margin-right: 10px;">
+            🔙 返回查询页面
+        </a>
+        <a href="{% url 'homepage:add-milkproductionbymonth' selected_year=selected_year selected_month=selected_month %}" 
+           style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; margin-right: 10px;">
+            📝 添加更多数据
+        </a>
+        <a href="{% url 'homepage:mainpage' %}"
+           style="display: inline-block; padding: 10px 20px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 4px;">
+            🏠 返回首页
+        </a>
+    </div>
 
 </body>
 {%endblock%}

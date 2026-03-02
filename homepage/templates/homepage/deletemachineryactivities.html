@@ -56,8 +56,8 @@ body {
     <p>Are you sure you want to delete this Activity?</p>
     <form method="post">
       {% csrf_token %}
-      <input class="delete-button" type="submit" value="Delete">
-      <a class="cancel-link" href="{% url 'homepage:show-machineryactivities'  Number_plate=machinery_activities.machinery.Number_plate %}">Cancel</a>
+      <input class="delete-button" type="submit" value="删除">
+      <a class="cancel-link" href="{% url 'homepage:show-machineryactivities'  Number_plate=machinery_activities.machinery.Number_plate %}">取消</a>
     </form>
   </div>
 </body>

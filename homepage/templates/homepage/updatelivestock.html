@@ -1,7 +1,7 @@
 {%extends 'homepage/base.html'%}
 {%block content%}
 <head>
-    <title>update Livestock</title>
+    <title>更新采摘批次</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -59,22 +59,22 @@
     </style>
     </head>
     <body>
-      <h1>Update Livestock</h1>
+      <h1>更新采摘批次</h1>
       <form method="post">
         {% csrf_token %}
     
-        <label for="id_Tag_number">Tag Number:</label>
+        <label for="id_Tag_number">批次编号:</label>
         <input type="text" name="Tag_number" id="id_Tag_number" value="{{livestock.Tag_number }}" required>
     
-        <label for="id_Animal_type">Animal Type:</label>
+        <label for="id_Animal_type">香梨等级:</label>
         <input type="text" name="Animal_type" id="id_Animal_type" value="{{ livestock.Animal_type }}" required>
 
-        <label for="id_Age">Age:</label>
+        <label for="id_Age">存储时长(年):</label>
         <input type="number" name="Age" id="id_Age" value="{{ livestock.Age }}" required>
 
-        <label for="id_Breed">Breed:</label>
+        <label for="id_Breed">香梨品种:</label>
         <input type="text" name="Breed" id="id_Breed" value="{{ livestock.Breed }}" required>    
-        <input type="submit" value="Update">
+        <input type="submit" value="更新">
       </form>
     </body>
     {%endblock%}

@@ -65,16 +65,16 @@
   </style>
 </head>
 <body>
-  <h1>Machinery Maintenance and repair</h1>
+  <h1>农机维护与维修记录</h1>
   <table>
     <thead>
       <tr>
-        <th>Date</th>
-        <th>Machinery Part</th>
-        <th>Technician Details</th>
-        <th> Cost</th>
-        <th>Description</th>
-        <th>Actions</th>
+        <th>日期</th>
+        <th>农机部件</th>
+        <th>技术人员详情</th>
+        <th>成本</th>
+        <th>描述</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
@@ -87,8 +87,8 @@
         <td>{{ maintenance.Description }}</td>
 
         <td>
-          <a href="{%url 'homepage:update-machinerymaintenance' Number_plate=machinery.Number_plate Date=maintenance.Date|date:'Y-m-d' %}"class="update-link">Update</a>
-          <a href="{%url 'homepage:delete-machinerymaintenance' Number_plate=machinery.Number_plate Date=maintenance.Date|date:'Y-m-d' %}"class="delete-link">Delete</a >
+          <a href="{%url 'homepage:update-machinerymaintenance' Number_plate=machinery.Number_plate Date=maintenance.Date|date:'Y-m-d' %}"class="update-link">更新</a>
+          <a href="{%url 'homepage:delete-machinerymaintenance' Number_plate=machinery.Number_plate Date=maintenance.Date|date:'Y-m-d' %}"class="delete-link">删除</a >
         </td>
       </tr>
       {% endfor %}
@@ -97,6 +97,6 @@
 
   <a
     href="{% url 'homepage:add-machinerymaintenance' Number_plate=machinery.Number_plate %}"
-    class="add-button">Add maintenance or repair</a>
+    class="add-button">添加维护或维修记录</a>
 </body>
 {%endblock%}

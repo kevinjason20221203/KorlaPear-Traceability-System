@@ -65,14 +65,14 @@
   </style>
 </head>
 <body>
-  <h1>Crop Operations Details</h1>
+  <h1>种植操作详情</h1>
   <table>
     <thead>
       <tr>
-        <th>Operation Date</th>
-        <th>Operation Name</th>
-        <th>Additional Notes</th>
-        <th>Actions</th>
+        <th>操作日期</th>
+        <th>操作名称</th>
+        <th>备注信息</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
@@ -86,12 +86,12 @@
           <a
             href="{%url 'homepage:update-cropoperations' Cid=crops.Cid Operation_date=operation.Operation_date|date:'Y-m-d' %}"
             class="update-link"
-            >Update</a
+            >更新</a
           >
           <a
             href="{%url 'homepage:delete-cropoperations' Cid=crops.Cid Operation_date=operation.Operation_date|date:'Y-m-d' %}"
             class="delete-link"
-            >Delete</a
+            >删除</a
           >
         </td>
       </tr>
@@ -102,7 +102,7 @@
   <a
     href="{% url 'homepage:add-cropoperations' Cid=crops.Cid %}"
     class="add-button"
-    >Add an Operation</a
+    >添加操作记录</a
   >
 </body>
 {%endblock%}

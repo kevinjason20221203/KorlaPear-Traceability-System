@@ -484,55 +484,129 @@ from io import BytesIO # create an in-memory buffer to temporarily store the bin
 import base64 # encode the binary data of the plots into Base64 format(Base64 encoding used to convert binary data into  such as images, into a text-based format that can be easily embedded in HTML)
 
 def Milk_production_by_month(request, selected_year, selected_month):
-    # Fetching milk production by the year and month selected
-    milk_production_records = Milk_production.objects.filter(Year=selected_year, Month=selected_month)
+    # 获取选定年份和月份的产量记录
+    milk_production_records = Milk_production.objects.filter(Year=selected_year, Month=selected_month).order_by('Day')
 
-    # Prepare data for the bar graph of total consumption vs day
-    days = [record.Day  for record in milk_production_records]
-    total_consumption = [record.Total_consumption for record in milk_production_records]
-
-    # Create a bar graph for Total Consumption vs Day
-    plt.figure(figsize=(12, 6))
-    plt.bar(days, total_consumption, color='green')
-    plt.title('Total Consumption vs Day')
-    plt.xlabel('Day')
-    plt.ylabel('Total Consumption')
+    # 准备数据：每日总产量和总消耗
+    days = [record.Day for record in milk_production_records]
+    total_production = [float(record.Total_production) for record in milk_production_records]
+    total_consumption = [float(record.Total_consumption) for record in milk_production_records]
     
-    # Save the plot to a BytesIO object
-    image_stream_consumption = BytesIO()
-    plt.savefig(image_stream_consumption, format='png')
-    image_stream_consumption.seek(0)
-    image_base64_consumption = base64.b64encode(image_stream_consumption.read()).decode('utf-8')
+    # 准备数据：分时段产量（早晨、中午、晚上）
+    morning_production = [float(record.Morning_production) for record in milk_production_records]
+    midday_production = [float(record.Midday_production) if record.Midday_production else 0 for record in milk_production_records]
+    evening_production = [float(record.Evening_production) if record.Evening_production else 0 for record in milk_production_records]
 
-    # Close the plot to free up resources
-    plt.close()
-
-    # Prepare data for the bar graph of milk production vs day
-    total_production = [record.Total_production for record in milk_production_records]
-
-    # Create a bar graph for Milk Production vs Day
-    plt.figure(figsize=(12, 6))
-    plt.bar(days, total_production, color='blue')
-    plt.title('Milk Production vs Day')
-    plt.xlabel('Day')
-    plt.ylabel('Milk Production')
-
-    # Save the plot to a BytesIO object
+    # ========== 图表1：每日总产量柱状图 ==========
+    plt.figure(figsize=(14, 6))
+    plt.bar(days, total_production, color='#4CAF50', alpha=0.8, label='总产量')
+    plt.title(f'{selected_year}年{selected_month}月 - 香梨每日总产量趋势', fontsize=16, fontweight='bold')
+    plt.xlabel('日期（日）', fontsize=12)
+    plt.ylabel('产量（公斤）', fontsize=12)
+    plt.grid(axis='y', alpha=0.3)
+    plt.legend()
+    
+    # 添加数据标签
+    for i, v in enumerate(total_production):
+        plt.text(days[i], v + max(total_production)*0.01, f'{v:.1f}', ha='center', va='bottom', fontsize=9)
+    
+    # 保存图表1
     image_stream_production = BytesIO()
-    plt.savefig(image_stream_production, format='png')
+    plt.savefig(image_stream_production, format='png', dpi=100, bbox_inches='tight')
     image_stream_production.seek(0)
     image_base64_production = base64.b64encode(image_stream_production.read()).decode('utf-8')
-
-    # Close the plot to free up resources
     plt.close()
 
-    # Pass both base64-encoded images to the template
+    # ========== 图表2：分时段产量堆叠柱状图 ==========
+    plt.figure(figsize=(14, 6))
+    bar_width = 0.6
+    plt.bar(days, morning_production, color='#FF9800', width=bar_width, label='早晨产量', alpha=0.8)
+    plt.bar(days, midday_production, bottom=morning_production, color='#2196F3', width=bar_width, label='中午产量', alpha=0.8)
+    plt.bar(days, evening_production, bottom=[i+j for i,j in zip(morning_production, midday_production)], 
+            color='#9C27B0', width=bar_width, label='晚上产量', alpha=0.8)
+    
+    plt.title(f'{selected_year}年{selected_month}月 - 香梨分时段产量分布', fontsize=16, fontweight='bold')
+    plt.xlabel('日期（日）', fontsize=12)
+    plt.ylabel('产量（公斤）', fontsize=12)
+    plt.grid(axis='y', alpha=0.3)
+    plt.legend(loc='upper left')
+    
+    # 保存图表2
+    image_stream_timeslot = BytesIO()
+    plt.savefig(image_stream_timeslot, format='png', dpi=100, bbox_inches='tight')
+    image_stream_timeslot.seek(0)
+    image_base64_timeslot = base64.b64encode(image_stream_timeslot.read()).decode('utf-8')
+    plt.close()
+
+    # ========== 图表3：产量与消耗对比折线图 ==========
+    plt.figure(figsize=(14, 6))
+    plt.plot(days, total_production, marker='o', color='#4CAF50', linewidth=2, markersize=6, label='总产量')
+    plt.plot(days, total_consumption, marker='s', color='#F44336', linewidth=2, markersize=6, label='总消耗')
+    
+    plt.title(f'{selected_year}年{selected_month}月 - 产量与消耗对比趋势', fontsize=16, fontweight='bold')
+    plt.xlabel('日期（日）', fontsize=12)
+    plt.ylabel('数量（公斤）', fontsize=12)
+    plt.grid(True, alpha=0.3)
+    plt.legend()
+    
+    # 填充产量与消耗之间的区域
+    plt.fill_between(days, total_production, total_consumption, where=[p >= c for p,c in zip(total_production, total_consumption)], 
+                     color='#4CAF50', alpha=0.2, label='产量盈余')
+    plt.fill_between(days, total_production, total_consumption, where=[p < c for p,c in zip(total_production, total_consumption)], 
+                     color='#F44336', alpha=0.2, label='消耗超出')
+    
+    # 保存图表3
+    image_stream_comparison = BytesIO()
+    plt.savefig(image_stream_comparison, format='png', dpi=100, bbox_inches='tight')
+    image_stream_comparison.seek(0)
+    image_base64_comparison = base64.b64encode(image_stream_comparison.read()).decode('utf-8')
+    plt.close()
+
+    # ========== 图表4：月度统计摘要 ==========
+    if milk_production_records:
+        total_month_production = sum(total_production)
+        total_month_consumption = sum(total_consumption)
+        avg_daily_production = total_month_production / len(days)
+        avg_daily_consumption = total_month_consumption / len(days)
+        
+        # 创建月度统计图表
+        plt.figure(figsize=(10, 6))
+        categories = ['总产量', '总消耗', '日均产量', '日均消耗']
+        values = [total_month_production, total_month_consumption, avg_daily_production, avg_daily_consumption]
+        colors = ['#4CAF50', '#F44336', '#2196F3', '#FF9800']
+        
+        bars = plt.bar(categories, values, color=colors, alpha=0.8)
+        plt.title(f'{selected_year}年{selected_month}月 - 月度统计摘要', fontsize=16, fontweight='bold')
+        plt.ylabel('数量（公斤）', fontsize=12)
+        plt.grid(axis='y', alpha=0.3)
+        
+        # 添加数据标签
+        for bar, value in zip(bars, values):
+            plt.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max(values)*0.01, 
+                    f'{value:.1f}', ha='center', va='bottom', fontsize=10)
+        
+        # 保存图表4
+        image_stream_summary = BytesIO()
+        plt.savefig(image_stream_summary, format='png', dpi=100, bbox_inches='tight')
+        image_stream_summary.seek(0)
+        image_base64_summary = base64.b64encode(image_stream_summary.read()).decode('utf-8')
+        plt.close()
+    else:
+        image_base64_summary = None
+
+    # 传递所有图表到模板
     return render(request, 'homepage/milkproductionbymonth.html', {
         'selected_year': selected_year,
         'selected_month': selected_month,
-        'image_base64_consumption': image_base64_consumption,
-        'image_base64_production': image_base64_production,
         'milk_production_records': milk_production_records,
+        'image_base64_production': image_base64_production,
+        'image_base64_timeslot': image_base64_timeslot,
+        'image_base64_comparison': image_base64_comparison,
+        'image_base64_summary': image_base64_summary,
+        'has_data': len(milk_production_records) > 0,
+        'total_records': len(milk_production_records),
+        'total_production': sum(total_production) if milk_production_records else 0,
+        'total_consumption': sum(total_consumption) if milk_production_records else 0,
     })
 
 

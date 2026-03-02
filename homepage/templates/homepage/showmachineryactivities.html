@@ -65,15 +65,15 @@
   </style>
 </head>
 <body>
-  <h1>Machinery Activities Details</h1>
+  <h1>农机活动详情</h1>
   <table>
     <thead>
       <tr>
-        <th>Activity Date</th>
-        <th>Activity Type</th>
-        <th>Activity Cost</th>
-        <th>Description</th>
-        <th>Actions</th>
+        <th>活动日期</th>
+        <th>活动类型</th>
+        <th>活动成本</th>
+        <th>描述</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
@@ -85,8 +85,8 @@
         <td>{{ activity.Description }}</td>
 
         <td>
-          <a href="{%url 'homepage:update-machineryactivities' Number_plate=machinery.Number_plate Activity_date=activity.Activity_date|date:'Y-m-d' %}"class="update-link">Update</a>
-          <a href="{%url 'homepage:delete-machineryactivities' Number_plate=machinery.Number_plate Activity_date=activity.Activity_date|date:'Y-m-d' %}"class="delete-link">Delete</a >
+          <a href="{%url 'homepage:update-machineryactivities' Number_plate=machinery.Number_plate Activity_date=activity.Activity_date|date:'Y-m-d' %}"class="update-link">更新</a>
+          <a href="{%url 'homepage:delete-machineryactivities' Number_plate=machinery.Number_plate Activity_date=activity.Activity_date|date:'Y-m-d' %}"class="delete-link">删除</a >
         </td>
       </tr>
       {% endfor %}
@@ -95,6 +95,6 @@
 
   <a
     href="{% url 'homepage:add-machineryactivities' Number_plate=machinery.Number_plate %}"
-    class="add-button">Add an Activity</a>
+    class="add-button">添加活动记录</a>
 </body>
 {%endblock%}

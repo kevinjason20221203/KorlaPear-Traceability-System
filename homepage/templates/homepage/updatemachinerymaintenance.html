@@ -63,7 +63,7 @@
       <form method="post">
         {% csrf_token %}
     
-        <label for="id_Date">Date:</label>
+        <label>日期:</label>
         <input type="date" name="Date" id="id_Date" value="{{machinery_maintenance.Date }}" required>
     
         <label for="id_Machinery_part">Machinery Part:</label>
@@ -75,13 +75,13 @@
         <label for="id_Cost">Activity Cost:</label>
         <input type="number" name="Cost" id="id_Cost" value="{{ machinery_maintenance.Cost }}" required>
 
-        <label for="id_Description">Description:</label>
+        <label>描述:</label>
         <textarea name="Description" id="id_Description" value="{{ machinery_maintenance.Description }}" required>  </textarea>
         
       
 
 
-        <input type="submit" value="Update">
+        <input type="submit" value="更新">
       </form>
     </body>
     {%endblock%}

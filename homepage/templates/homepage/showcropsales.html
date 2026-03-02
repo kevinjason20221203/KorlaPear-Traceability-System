@@ -65,20 +65,20 @@
   </style>
 </head>
 <body>
-  <h1>Crop Sales Details</h1>
+  <h1>销售记录详情</h1>
   <table>
     <thead>
       <tr>
-        <th>Sales Date</th>
-        <th>Quantity Sold</th>
-        <th>Unit Price</th>
-        <th>Total Price</th>
-        <th>Buyers Information</th>
-        <th>Payment Method</th>
-        <th>Payment Status</th>
-        <th>Invoice Number</th>
-        <th>Additional information</th>
-        <th>Actions</th>
+        <th>销售日期</th>
+        <th>销售数量</th>
+        <th>单价</th>
+        <th>总价</th>
+        <th>买家信息</th>
+        <th>支付方式</th>
+        <th>支付状态</th>
+        <th>发票编号</th>
+        <th>备注信息</th>
+        <th>操作</th>
       </tr>
     </thead>
     <tbody>
@@ -95,8 +95,8 @@
         <td>{{ sale.Additional_notes }}</td>
 
         <td>
-          <a href="{%url 'homepage:update-cropsales' Cid=crops.Cid Sale_date=sale.Sale_date|date:'Y-m-d' %}"class="update-link">Update</a>
-          <a href="{%url 'homepage:delete-cropsales' Cid=crops.Cid Sale_date=sale.Sale_date|date:'Y-m-d' %}"class="delete-link">Delete</a >
+          <a href="{%url 'homepage:update-cropsales' Cid=crops.Cid Sale_date=sale.Sale_date|date:'Y-m-d' %}"class="update-link">更新</a>
+          <a href="{%url 'homepage:delete-cropsales' Cid=crops.Cid Sale_date=sale.Sale_date|date:'Y-m-d' %}"class="delete-link">删除</a >
         </td>
       </tr>
       {% endfor %}
@@ -105,6 +105,6 @@
 
   <a
     href="{% url 'homepage:add-cropsales' Cid=crops.Cid %}"
-    class="add-button">Add a Sale</a>
+    class="add-button">添加销售记录</a>
 </body>
 {%endblock%}

@@ -1,5 +1,5 @@
 """
-URL configuration for FarmManagementSystem project.
+URL configuration for KorlaPearTraceabilitySystem project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/

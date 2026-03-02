@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-ROOT_URLCONF = "FarmManagementSystem.urls"
+ROOT_URLCONF = "KorlaPearTraceabilitySystem.urls"
 
 TEMPLATES = [
     {
@@ -71,7 +71,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "FarmManagementSystem.wsgi.application"
+WSGI_APPLICATION = "KorlaPearTraceabilitySystem.wsgi.application"
 
 
 # Database
